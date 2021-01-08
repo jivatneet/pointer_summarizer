@@ -8,6 +8,8 @@ from data_util import config
 from numpy import random
 import transformer_encoder  
 
+from transformers import BertModel
+
 use_cuda = config.use_gpu and torch.cuda.is_available()
 
 random.seed(123)
@@ -45,7 +47,7 @@ class Encoder(nn.Module):
         super(Encoder, self).__init__()
         self.embedding = nn.Embedding(config.vocab_size, config.emb_dim)
         init_wt_normal(self.embedding.weight)
-        
+
         if config.use_lstm:
             self.lstm = nn.LSTM(config.emb_dim, config.hidden_dim, num_layers=1, batch_first=True, bidirectional=True)
             init_lstm_wt(self.lstm)
@@ -62,18 +64,51 @@ class Encoder(nn.Module):
 
     #seq_lens should be in descending order
     def forward(self, input, seq_lens, enc_padding_mask):
-        embedded = self.embedding(input)
+
+        # print("INPUT ", input)
+        # print("SHAPE ",input.shape)
+        # print("LEN ", seq_lens)
+        # embedded = self.embedding(input)
         
+        bert = BertModel.from_pretrained('bert-base-uncased')
+        if use_cuda:
+            bert = bert.cuda()
+
+        bert.eval()
+
+        ques_bert_output = []
+        with torch.no_grad():
+            ques_bert_output = bert(input)
+            # print("EMBED ", ques_bert_output)
+            # print("sh: ", ques_bert_output[0].size())
+            # hidden = ques_bert_output[2]
+            # print("HIDDEN SH: ", hidden.shape)
+            # print(len(hidden))
+            # print(len(hidden[0]))
+            # print(len(hidden[0][0]))
+            # print(len(hidden[0][0][0]))
+            # print("SH: ", hidden[0].size())
+            
+        hidden_state = ques_bert_output[0]
+        # BERT tokenization
+        # question_bert_tokens = self.tz.encode_plus(text = questions, add_special_tokens = True) 
+        # print(question_bert_tokens)
+
+        # if use_cuda:
+        #    question_bert_tokens = question_bert_tokens.cuda()
+
         if config.use_lstm:
-            packed = pack_padded_sequence(embedded, seq_lens, batch_first=True)
+            packed = pack_padded_sequence(hidden_state, seq_lens, batch_first=True, enforce_sorted = False)
             output, hidden = self.lstm(packed)
 
             encoder_outputs, _ = pad_packed_sequence(output, batch_first=True)  # h dim = B x t_k x n
             encoder_outputs = encoder_outputs.contiguous()
+
         else:
             word_embed_proj = self.tx_proj(embedded)
             lstm_feats = self.lstm(word_embed_proj, enc_padding_mask.unsqueeze(-1))
-            
+          
+        # encoder_feature = encoder_outputs
         encoder_feature = encoder_outputs.view(-1, 2*config.hidden_dim)  # B * t_k x 2*hidden_dim
         encoder_feature = self.W_h(encoder_feature)
 
@@ -119,11 +154,14 @@ class Attention(nn.Module):
             coverage_feature = self.W_c(coverage_input)  # B * t_k x 2*hidden_dim
             att_features = att_features + coverage_feature
 
-        e = F.tanh(att_features) # B * t_k x 2*hidden_dim
+        e = torch.tanh(att_features) # B * t_k x 2*hidden_dim
         scores = self.v(e)  # B * t_k x 1
         scores = scores.view(-1, t_k)  # B x t_k
 
-        attn_dist_ = F.softmax(scores, dim=1)*enc_padding_mask # B x t_k
+        # print("SCORES: ", scores.size())
+        # print("ENC MASK: ", enc_padding_mask.size())
+
+        attn_dist_ = torch.softmax(scores, dim=1)*enc_padding_mask # B x t_k
         normalization_factor = attn_dist_.sum(1, keepdim=True)
         attn_dist = attn_dist_ / normalization_factor
 
@@ -188,7 +226,7 @@ class Decoder(nn.Module):
         if config.pointer_gen:
             p_gen_input = torch.cat((c_t, s_t_hat, x), 1)  # B x (2*2*hidden_dim + emb_dim)
             p_gen = self.p_gen_linear(p_gen_input)
-            p_gen = F.sigmoid(p_gen)
+            p_gen = torch.sigmoid(p_gen)
 
         output = torch.cat((lstm_out.view(-1, config.hidden_dim), c_t), 1) # B x hidden_dim * 3
         output = self.out1(output) # B x hidden_dim
@@ -196,7 +234,8 @@ class Decoder(nn.Module):
         #output = F.relu(output)
 
         output = self.out2(output) # B x vocab_size
-        vocab_dist = F.softmax(output, dim=1)
+        # print("DECODER OUT: ", output.size())
+        vocab_dist = torch.softmax(output, dim=1)
 
         if config.pointer_gen:
             vocab_dist_ = p_gen * vocab_dist
@@ -205,6 +244,7 @@ class Decoder(nn.Module):
             if extra_zeros is not None:
                 vocab_dist_ = torch.cat([vocab_dist_, extra_zeros], 1)
 
+            # print("VOCAB DIST {}, ENC EXT {}, ATTN {}".format(vocab_dist_.size(), enc_batch_extend_vocab.size(), attn_dist_.size()))
             final_dist = vocab_dist_.scatter_add(1, enc_batch_extend_vocab, attn_dist_)
         else:
             final_dist = vocab_dist

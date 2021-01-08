@@ -7,6 +7,8 @@ from threading import Thread
 
 import numpy as np
 import tensorflow as tf
+from transformers import BertTokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 
 import data_util.config as config
 import data_util.data as data
@@ -14,24 +16,42 @@ import data_util.data as data
 import random
 random.seed(1234)
 
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
 class Example(object):
 
   def __init__(self, article, abstract_sentences, vocab):
-    # Get ids of special tokens
+
+    # tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
+
+    # Get ids of specia tokens
     start_decoding = vocab.word2id(data.START_DECODING)
     stop_decoding = vocab.word2id(data.STOP_DECODING)
 
     # Process the article
-    article_words = article.split()
+    article_words = article.lower() #article.split()
+    question = article_words.decode('utf-8')
+
     if len(article_words) > config.max_enc_steps:
-      article_words = article_words[:config.max_enc_steps]
+        article_words = article_words.split()[:config.max_enc_steps]
     self.enc_len = len(article_words) # store the length after truncation but before padding
     self.enc_input = [vocab.word2id(w) for w in article_words] # list of word ids; OOVs are represented by the id for UNK token
+    
+    # BERT embeddings
+    tokens = tokenizer.tokenize(question)
+    encoded = tokenizer.encode_plus(text = question)
+    self.ques_input = encoded['input_ids']
+    self.ques_input = self.ques_input[:config.max_enc_steps]
+    self.ques_len = len(self.ques_input)
+    # print("QUES: {} \n ENCODE: {}\n\n".format(question, self.ques_input))
 
     # Process the abstract
     abstract = b' '.join(abstract_sentences) # string
-    abstract_words = abstract.split() # list of strings
+    # abstract_words = abstract.split() # list of strings
+    
+    abstract_words = abstract.replace(b",",b" , ").split()
+    abstract_words = [x.lower() for x in abstract_words]
+
     abs_ids = [vocab.word2id(w) for w in abstract_words] # list of word ids; OOVs are represented by the id for UNK token
 
     # Get the decoder input sequence and target sequence
@@ -41,8 +61,8 @@ class Example(object):
     # If using pointer-generator mode, we need to store some extra info
     if config.pointer_gen:
       # Store a version of the enc_input where in-article OOVs are represented by their temporary OOV id; also store the in-article OOVs words themselves
-      self.enc_input_extend_vocab, self.article_oovs = data.article2ids(article_words, vocab)
-
+      self.enc_input_extend_vocab, self.article_oovs = data.article2ids(tokens, vocab)
+      
       # Get a verison of the reference summary where in-article OOVs are represented by their temporary article OOV id
       abs_ids_extend_vocab = data.abstract2ids(abstract_words, vocab, self.article_oovs)
 
@@ -81,6 +101,10 @@ class Example(object):
       while len(self.enc_input_extend_vocab) < max_len:
         self.enc_input_extend_vocab.append(pad_id)
 
+  def pad_encoder_ques_input(self, max_len, pad_id):
+    while len(self.ques_input) < max_len:
+        self.ques_input.append(pad_id)
+    
 
 class Batch(object):
   def __init__(self, example_list, vocab, batch_size):
@@ -93,23 +117,31 @@ class Batch(object):
 
   def init_encoder_seq(self, example_list):
     # Determine the maximum length of the encoder input sequence in this batch
-    max_enc_seq_len = max([ex.enc_len for ex in example_list])
+    # max_enc_seq_len = max([ex.enc_len for ex in example_list])
+    max_enc_seq_len = max([ex.ques_len for ex in example_list])
+    max_enc_inp_len = max([ex.enc_len for ex in example_list])
 
     # Pad the encoder input sequences up to the length of the longest sequence
     for ex in example_list:
-      ex.pad_encoder_input(max_enc_seq_len, self.pad_id)
+      ex.pad_encoder_input(max_enc_seq_len, self.pad_id) # max_enc_seq_len -> max_enc_inp_len
+      ex.pad_encoder_ques_input(max_enc_seq_len, self.pad_id)
 
     # Initialize the numpy arrays
     # Note: our enc_batch can have different length (second dimension) for each batch because we use dynamic_rnn for the encoder.
-    self.enc_batch = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.int32)
+    self.enc_batch = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.int32) # inp -> seq
     self.enc_lens = np.zeros((self.batch_size), dtype=np.int32)
-    self.enc_padding_mask = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.float32)
+    self.enc_padding_mask = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.float32) # inp->seq
+    # self.ques_batch = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.int32)
 
     # Fill in the numpy arrays
     for i, ex in enumerate(example_list):
-      self.enc_batch[i, :] = ex.enc_input[:]
-      self.enc_lens[i] = ex.enc_len
-      for j in range(ex.enc_len):
+      # self.enc_batch[i, :] = ex.enc_input[:]
+      # self.enc_lens[i] = ex.enc_len
+      # padded_ques = pad_sequences([tokenizer.convert_tokens_to_ids(ex.ques_input)], maxlen=max_enc_seq_len, truncating="post", padding="post", dtype="int")
+      # print("PADDED ", padded_ques)
+      self.enc_batch[i, :] = ex.ques_input[:]
+      self.enc_lens[i] = ex.ques_len
+      for j in range(ex.ques_len):  #enc_len -> ques_len
         self.enc_padding_mask[i][j] = 1
 
     # For pointer-generator mode, need to store some extra info
@@ -119,7 +151,7 @@ class Batch(object):
       # Store the in-article OOVs themselves
       self.art_oovs = [ex.article_oovs for ex in example_list]
       # Store the version of the enc_batch that uses the article OOV ids
-      self.enc_batch_extend_vocab = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.int32)
+      self.enc_batch_extend_vocab = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.int32) # max_enc_seq_len -> max_enc_seq_len
       for i, ex in enumerate(example_list):
         self.enc_batch_extend_vocab[i, :] = ex.enc_input_extend_vocab[:]
 
@@ -160,6 +192,7 @@ class Batcher(object):
     # Initialize a queue of Batches waiting to be used, and a queue of Examples waiting to be batched
     self._batch_queue = queue.Queue(self.BATCH_QUEUE_MAX)
     self._example_queue = queue.Queue(self.BATCH_QUEUE_MAX * self.batch_size)
+    self.bcount = 0
 
     # Different settings depending on whether we're in single_pass mode or not
     if single_pass:
@@ -193,12 +226,17 @@ class Batcher(object):
   def next_batch(self):
     # If the batch queue is empty, print a warning
     if self._batch_queue.qsize() == 0:
-      tf.logging.warning('Bucket input queue is empty when calling next_batch. Bucket queue size: %i, Input queue size: %i', self._batch_queue.qsize(), self._example_queue.qsize())
+      tf.compat.v1.logging.warning('Bucket input queue is empty when calling next_batch. Bucket queue size: %i, Input queue size: %i', self._batch_queue.qsize(), self._example_queue.qsize())
       if self._single_pass and self._finished_reading:
-        tf.logging.info("Finished reading dataset in single_pass mode.")
+        tf.compat.v1.logging.info("Finished reading dataset in single_pass mode.")
         return None
 
+    self.bcount += 1
     batch = self._batch_queue.get() # get the next Batch
+    
+    if self.bcount == 0:
+        print(batch)
+    
     return batch
 
   def fill_example_queue(self):
@@ -207,16 +245,19 @@ class Batcher(object):
     while True:
       try:
         (article, abstract) = next(input_gen) # read the next example from file. article and abstract are both strings.
+
       except StopIteration: # if there are no more examples:
         tf.logging.info("The example generator for this example queue filling thread has exhausted data.")
+        self.bcount = 0
         if self._single_pass:
           tf.logging.info("single_pass mode is on, so we've finished reading dataset. This thread is stopping.")
           self._finished_reading = True
           break
         else:
           raise Exception("single_pass mode is off but the example generator is out of data; error.")
-
-      abstract_sentences = [sent.strip() for sent in data.abstract2sents(abstract)] # Use the <s> and </s> tags in abstract to get a list of sentences.
+    
+      abstract_sentences = abstract
+      # abstract_sentences = [sent.strip() for sent in data.abstract2sents(abstract)] # Use the <s> and </s> tags in abstract to get a list of sentences.
       example = Example(article, abstract_sentences, self._vocab) # Process into an Example.
       self._example_queue.put(example) # place the Example in the example queue.
 
@@ -245,7 +286,7 @@ class Batcher(object):
 
   def watch_threads(self):
     while True:
-      tf.logging.info(
+      tf.compat.v1.logging.info(
         'Bucket queue size: %i, Input queue size: %i',
         self._batch_queue.qsize(), self._example_queue.qsize())
 
@@ -271,9 +312,11 @@ class Batcher(object):
       e = next(example_generator) # e is a tf.Example
       try:
         article_text = e.features.feature['article'].bytes_list.value[0] # the article text was saved under the key 'article' in the data files
-        abstract_text = e.features.feature['abstract'].bytes_list.value[0] # the abstract text was saved under the key 'abstract' in the data files
+        abstract_text = e.features.feature['abstract'].bytes_list.value # the abstract text was saved under the key 'abstract' in the data files
+       # print(article_text)
+       # print(abstract_text)
       except ValueError:
-        tf.logging.error('Failed to get article or abstract from example')
+        tf.compat.v1.logging.error('Failed to get article or abstract from example')
         continue
       if len(article_text)==0: # See https://github.com/abisee/pointer-generator/issues/1
         #tf.logging.warning('Found an example with empty article text. Skipping it.')

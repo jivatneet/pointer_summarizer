@@ -24,6 +24,10 @@ class Train(object):
         self.vocab = Vocab(config.vocab_path, config.vocab_size)
         self.batcher = Batcher(config.train_data_path, self.vocab, mode='train',
                                batch_size=config.batch_size, single_pass=False)
+        
+       # self.testbatcher = Batcher(config.eval_data_path, self.vocab, mode='eval',
+        #                       batch_size=config.batch_size, single_pass=False)
+        
         time.sleep(15)
 
         train_dir = os.path.join(config.log_root, 'train_%d' % (int(time.time())))
@@ -34,9 +38,9 @@ class Train(object):
         if not os.path.exists(self.model_dir):
             os.mkdir(self.model_dir)
 
-        self.summary_writer = tf.summary.FileWriter(train_dir)
+        self.summary_writer = tf.compat.v1.summary.FileWriter(train_dir)
 
-    def save_model(self, running_avg_loss, iter):
+    def save_model(self, running_avg_loss, iter, fuzz = False, fuzzval = None):
         state = {
             'iter': iter,
             'encoder_state_dict': self.model.encoder.state_dict(),
@@ -45,7 +49,12 @@ class Train(object):
             'optimizer': self.optimizer.state_dict(),
             'current_loss': running_avg_loss
         }
-        model_save_path = os.path.join(self.model_dir, 'model_%d_%d' % (iter, int(time.time())))
+
+        if fuzz:
+            model_save_path = os.path.join(self.model_dir, 'model_fuzz_%d_%d_%f' % (iter, int(time.time()), fuzzval))
+
+        else:
+            model_save_path = os.path.join(self.model_dir, 'model_loss_%d_%d_%f' % (iter, int(time.time()), running_avg_loss))
         torch.save(state, model_save_path)
 
     def setup_train(self, model_file_path=None):
@@ -79,6 +88,10 @@ class Train(object):
         dec_batch, dec_padding_mask, max_dec_len, dec_lens_var, target_batch = \
             get_output_from_batch(batch, use_cuda)
 
+        
+       # print('Enc batch ', enc_batch)
+       # print('Target batch ', target_batch)
+
         self.optimizer.zero_grad()
 
         encoder_outputs, encoder_feature, encoder_hidden = self.model.encoder(enc_batch, enc_lens, enc_padding_mask)
@@ -91,6 +104,24 @@ class Train(object):
                                                         encoder_outputs, encoder_feature, enc_padding_mask, c_t_1,
                                                         extra_zeros, enc_batch_extend_vocab,
                                                                            coverage, di)
+           
+            testoutput = final_dist
+
+            # print('TEST OUTPUT\n', testoutput)
+            # print('TEST SHAPE: ', testoutput.shape)
+            # print('TARGET BATCH\n', target_batch)
+            # print('TARGET SHAPE: ', target_batch.shape)
+            # for answer,target in zip(testoutput,target_batch):
+                           # qcount += 1
+#                        #print("target: ",[x for x in list(target.numpy()) if x != 1 and x!=3])
+#                        #print("answer: ",[x for x in list(tf.math.argmax(answer, axis=1).numpy()) if x != 1 and x!= 3])
+                           # for x in list(target.cpu().numpy()):
+                            #    print(self.vocab.id2word(x))
+                            #   print(self.vocab.id2word(x).decode('utf-8'))
+
+                           # target = ' '.join([self.vocab.id2word(x).decode('utf-8') for x in list(target.cpu().numpy()) if x != 1 and x != 3])
+                           # answer = ' '.join([self.vocab.id2word(x).decode('utf-8') for x in list(torch.argmax(answer.cpu().detach()).numpy()) if x != 1 and x!= 3])
+            
             target = target_batch[:, di]
             gold_probs = torch.gather(final_dist, 1, target.unsqueeze(1)).squeeze()
             step_loss = -torch.log(gold_probs + config.eps)
@@ -129,6 +160,7 @@ class Train(object):
 
             if iter % 100 == 0:
                 self.summary_writer.flush()
+                print('steps %d loss: %f running avg loss: %f' % (iter, loss, running_avg_loss))
             print_interval = 1000
             if iter % print_interval == 0:
                 print('steps %d, seconds for %d batch: %.2f , loss: %f' % (iter, print_interval,

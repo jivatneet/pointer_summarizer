@@ -11,6 +11,7 @@ importlib.reload(sys)
 
 import os
 import time
+from fuzzywuzzy import fuzz
 
 import torch
 from torch.autograd import Variable
@@ -74,6 +75,9 @@ class BeamSearch(object):
         start = time.time()
         counter = 0
         batch = self.batcher.next_batch()
+        qcount = 0
+        totalfuzz = 0.0
+
         while batch is not None:
             # Run beam search to get best Hypothesis
             best_summary = self.beam_search(batch)
@@ -92,8 +96,14 @@ class BeamSearch(object):
 
             original_abstract_sents = batch.original_abstracts_sents[0]
 
-            write_for_rouge(original_abstract_sents, decoded_words, counter,
+            target, answer = write_for_rouge(original_abstract_sents, decoded_words, counter,
                             self._rouge_ref_dir, self._rouge_dec_dir)
+
+            qcount += 1
+            totalfuzz += fuzz.ratio(target.lower(), answer.lower())
+            print("target: ", target)
+            print("answer: ", answer,'\n')
+            print("avg fuzz after %d questions = %f"%(qcount,float(totalfuzz)/qcount))
             counter += 1
             if counter % 1000 == 0:
                 print('%d example in %d sec'%(counter, time.time() - start))

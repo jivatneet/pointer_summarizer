@@ -1,5 +1,6 @@
 #Content of this file is copied from https://github.com/abisee/pointer-generator/blob/master/
 import os
+from fuzzywuzzy import fuzz
 
 import logging
 import tensorflow as tf
@@ -55,7 +56,7 @@ def calc_running_avg_loss(loss, running_avg_loss, summary_writer, step, decay=0.
   else:
     running_avg_loss = running_avg_loss * decay + (1 - decay) * loss
   running_avg_loss = min(running_avg_loss, 12)  # clip
-  loss_sum = tf.Summary()
+  loss_sum = tf.compat.v1.Summary()
   tag_name = 'running_avg_loss/decay=%f' % (decay)
   loss_sum.value.add(tag=tag_name, simple_value=running_avg_loss)
   summary_writer.add_summary(loss_sum, step)
@@ -64,6 +65,7 @@ def calc_running_avg_loss(loss, running_avg_loss, summary_writer, step, decay=0.
 
 def write_for_rouge(reference_sents, decoded_words, ex_index,
                     _rouge_ref_dir, _rouge_dec_dir):
+
   decoded_sents = []
   while len(decoded_words) > 0:
     try:
@@ -71,13 +73,31 @@ def write_for_rouge(reference_sents, decoded_words, ex_index,
     except ValueError:
       fst_period_idx = len(decoded_words)
     sent = decoded_words[:fst_period_idx + 1]
+
+    new_sent = ""
+    for word in sent:
+        try:
+            word = word.decode("utf-8")
+        except (UnicodeDecodeError, AttributeError):
+            pass
+        # word = word.decode('utf-8')
+        new_sent += ' ' + word
+
+    new_ref = reference_sents[0].decode('utf-8')
+   # totalfuzz += fuzz.ratio(new_ref.lower(), new_sent.lower())
+   # print("avg fuzz after %d questions = %f"%(qcount,float(totalfuzz)/qcount))
+
     decoded_words = decoded_words[fst_period_idx + 1:]
-    decoded_sents.append(' '.join(sent))
+    decoded_sents.append(' '.join(new_sent))
+
+    print('\n')
+    
+  #  decoded_sents.append(' '.join(sent.decode('utf-8')))
 
   # pyrouge calls a perl script that puts the data into HTML files.
   # Therefore we need to make our output HTML safe.
   decoded_sents = [make_html_safe(w) for w in decoded_sents]
-  reference_sents = [make_html_safe(w) for w in reference_sents]
+  reference_sents = [make_html_safe(w) for w in new_ref]
 
   ref_file = os.path.join(_rouge_ref_dir, "%06d_reference.txt" % ex_index)
   decoded_file = os.path.join(_rouge_dec_dir, "%06d_decoded.txt" % ex_index)
@@ -88,5 +108,7 @@ def write_for_rouge(reference_sents, decoded_words, ex_index,
   with open(decoded_file, "w") as f:
     for idx, sent in enumerate(decoded_sents):
       f.write(sent) if idx == len(decoded_sents) - 1 else f.write(sent + "\n")
+
+  return new_ref, new_sent
 
   #print("Wrote example %i to file" % ex_index)

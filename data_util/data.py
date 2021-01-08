@@ -1,10 +1,13 @@
 #Most of this file is copied form https://github.com/abisee/pointer-generator/blob/master/data.py
 
+import json
 import glob
 import random
 import struct
 import csv
+import tensorflow as tf
 from tensorflow.core.example import example_pb2
+from tensorflow.core.example import feature_pb2
 
 # <s> and </s> are used in the data files to segment the abstracts into sentences. They don't receive vocab ids.
 SENTENCE_START = b'<s>'
@@ -26,7 +29,7 @@ class Vocab(object):
     self._count = 0 # keeps track of total number of words in the Vocab
 
     # [UNK], [PAD], [START] and [STOP] get the ids 0,1,2,3.
-    for w in [UNKNOWN_TOKEN, PAD_TOKEN, START_DECODING, STOP_DECODING]:
+    for w in [PAD_TOKEN, UNKNOWN_TOKEN, START_DECODING, STOP_DECODING]:
       self._word_to_id[w] = self._count
       self._id_to_word[self._count] = w
       self._count += 1
@@ -35,10 +38,11 @@ class Vocab(object):
     with open(vocab_file, 'r') as vocab_f:
       for line in vocab_f:
         pieces = line.split()
-        if len(pieces) != 2:
-          print (f'Warning: incorrectly formatted line in vocabulary file: {line}\n')
-          continue
-        w = pieces[0]
+       # if len(pieces) != 2:
+         # print (f'Warning: incorrectly formatted line in vocabulary file: {line}\n')
+         # continue
+        w = bytes(pieces[0], 'utf-8')
+        # print('Adding %s to vocabulary file' % w)
         if w in [SENTENCE_START, SENTENCE_END, UNKNOWN_TOKEN, PAD_TOKEN, START_DECODING, STOP_DECODING]:
           raise Exception('<s>, </s>, [UNK], [PAD], [START] and [STOP] shouldn\'t be in the vocab file, but %s is' % w)
         if w in self._word_to_id:
@@ -73,31 +77,68 @@ class Vocab(object):
       for i in range(self.size()):
         writer.writerow({"word": self._id_to_word[i]})
 
+def _bytes_feature(value):
+  """Returns a bytes_list from a string / byte."""
+  if isinstance(value, type(tf.constant(0))):
+    value = value.numpy() # BytesList won't unpack a string from an EagerTensor.
+  return feature_pb2.Feature(bytes_list=feature_pb2.BytesList(value=[value]))
 
 def example_generator(data_path, single_pass):
-  while True:
-    filelist = glob.glob(data_path) # get the list of datafiles
-    assert filelist, ('Error: Empty filelist at %s' % data_path) # check filelist isn't empty
+    d = json.loads(open(data_path).read())
+    assert d, ('Error: Empty file at %s' % data_path)  # check filelist isn't empty
+
+    # print(_bytes_feature(b'test_string'))
+    # print(_bytes_feature(bytes('test_string', 'utf-8')))
+
+    for item in d:
+        if not item["question"] or not item["intermediate_sparql"]:
+            continue
+        question = item["question"]
+        intermediate_sparql = item["intermediate_sparql"]
+        # intermediate_sparql = '<s>' + item["intermediate_sparql"] + '</s>'
+        dict = {
+            'article': bytes(question, 'utf-8'),
+            'abstract': bytes(intermediate_sparql, 'utf-8')
+        }
+
+       # print(dict['article'])
+       # print(dict['abstract'])
+       # print(_bytes_feature(dict['abstract']))
+
+        output = example_pb2.Example(features=feature_pb2.Features(feature={
+      'article': _bytes_feature(dict['article']),
+      'abstract': _bytes_feature(dict['abstract'])
+  }))
+        yield output
+
     if single_pass:
-      filelist = sorted(filelist)
-    else:
-      random.shuffle(filelist)
-    for f in filelist:
-      reader = open(f, 'rb')
-      while True:
-        len_bytes = reader.read(8)
-        if not len_bytes: break # finished reading this file
-        str_len = struct.unpack('q', len_bytes)[0]
-        example_str = struct.unpack('%ds' % str_len, reader.read(str_len))[0]
-        yield example_pb2.Example.FromString(example_str)
-    if single_pass:
-      print("example_generator completed reading all datafiles. No more data.")
-      break
+        print("example_generator completed reading all datafiles. No more data.")
+    return
+
+  # while True:
+  #   filelist = glob.glob(data_path) # get the list of datafiles
+  #   assert filelist, ('Error: Empty filelist at %s' % data_path) # check filelist isn't empty
+  #   if single_pass:
+  #     filelist = sorted(filelist)
+  #   else:
+  #     random.shuffle(filelist)
+  #   for f in filelist:
+  #     reader = open(f, 'rb')
+  #     while True:
+  #       len_bytes = reader.read(8)
+  #       if not len_bytes: break # finished reading this file
+  #       str_len = struct.unpack('q', len_bytes)[0]
+  #       example_str = struct.unpack('%ds' % str_len, reader.read(str_len))[0]
+  #       yield example_pb2.Example.FromString(example_str)
+  #   if single_pass:
+  #     print("example_generator completed reading all datafiles. No more data.")
+  #     break
 
 
 def article2ids(article_words, vocab):
   ids = []
   oovs = []
+  ids.append(0)
   unk_id = vocab.word2id(UNKNOWN_TOKEN)
   for w in article_words:
     i = vocab.word2id(w)
@@ -108,6 +149,8 @@ def article2ids(article_words, vocab):
       ids.append(vocab.size() + oov_num) # This is e.g. 50000 for the first article OOV, 50001 for the second...
     else:
       ids.append(i)
+
+  ids.append(0)
   return ids, oovs
 
 
