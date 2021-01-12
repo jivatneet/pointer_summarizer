@@ -16,7 +16,7 @@ batch_size= 8
 max_enc_steps=400
 max_dec_steps=100
 beam_size=4
-min_dec_steps=35
+min_dec_steps=8
 vocab_size=50000
 
 lr=0.15

@@ -141,6 +141,21 @@ def article2ids(article_words, vocab):
   ids.append(0)
   unk_id = vocab.word2id(UNKNOWN_TOKEN)
   for w in article_words:
+
+    if len(w) > 2:
+        if w[0] == "'" and w[-1] == "'" : #sparql specific hack for handling questions like "which cities start with the letter L "
+            w = w[1:-1]
+                                        #print("a2i singlequote: ",article_words,w)
+        if w[0] == '"' and w[-1] == '"':
+            w = w[1:-1]
+                                        #print("a2i doubequote: ",article_words,w)
+                        
+        try:                             #to handle questions like "which buildings have a height larger than 200.50 meters"
+            w = str(float(w))
+            #print("a2i float: ",article_words,w)            
+        except ValueError:
+            pass
+
     i = vocab.word2id(w)
     if i == unk_id: # If w is OOV
       if w not in oovs: # Add to list of OOVs
