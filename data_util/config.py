@@ -30,6 +30,7 @@ is_coverage = False
 cov_loss_wt = 1.0
 
 eps = 1e-12
+ls_eps = 0.1 # label smoothing
 max_iterations = 200000
 
 use_gpu=True

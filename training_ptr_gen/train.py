@@ -254,6 +254,9 @@ class Train(object):
 
         return start_iter, start_loss
 
+    def ls_combine(x, y, epsilon):
+        return epsilon * x + (1 - epsilon) * y    
+        
     def train_one_batch(self, batch):
         enc_batch, enc_padding_mask, enc_lens, enc_batch_extend_vocab, extra_zeros, c_t_1, coverage = \
             get_input_from_batch(batch, use_cuda)
@@ -277,8 +280,6 @@ class Train(object):
                                                         encoder_outputs, encoder_feature, enc_padding_mask, c_t_1,
                                                         extra_zeros, enc_batch_extend_vocab,
                                                                            coverage, di)
-           
-            testoutput = final_dist
 
             # print('TEST OUTPUT\n', testoutput)
             # print('TEST SHAPE: ', testoutput.shape)
@@ -298,6 +299,16 @@ class Train(object):
             target = target_batch[:, di]
             gold_probs = torch.gather(final_dist, 1, target.unsqueeze(1)).squeeze()
             step_loss = -torch.log(gold_probs + config.eps)
+
+            # label smoothing
+            log_probs = -torch.log(final_dist + config.eps)
+            loss = log_probs.sum(dim = 1)
+            K = final_dist.size()[-1]
+            loss_k = loss / K
+            epsilon = config.ls_eps
+            step_loss = epsilon * loss_k + (1 - epsilon) * step_loss
+            # step_loss = self.ls_combine(loss_k, step_loss, config.ls_eps)
+
             if config.is_coverage:
                 step_coverage_loss = torch.sum(torch.min(attn_dist, coverage), 1)
                 step_loss = step_loss + config.cov_loss_wt * step_coverage_loss
