@@ -17,40 +17,34 @@ import random
 random.seed(1234)
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
+vectorisation_len = 500
 
 class Example(object):
 
-  def __init__(self, article, abstract_sentences, vocab):
+  def __init__(self, article, abstract, ques_tokens, ques_vectors, vocab):
 
     # tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
-    # Get ids of specia tokens
+    # Get ids of special tokens
     start_decoding = vocab.word2id(data.START_DECODING)
     stop_decoding = vocab.word2id(data.STOP_DECODING)
 
-    # Process the article
-    article_words = article.lower() #article.split()
-    question = article_words.decode('utf-8')
+    # Process the article (question)
+    article_words = [w.lower() for w in ques_tokens]
+    question = article_words
 
     if len(article_words) > config.max_enc_steps:
-        article_words = article_words.split()[:config.max_enc_steps]
+        article_words = article_words[:config.max_enc_steps]
     self.enc_len = len(article_words) # store the length after truncation but before padding
-    self.enc_input = [vocab.word2id(w) for w in article_words] # list of word ids; OOVs are represented by the id for UNK token
+    # self.enc_input = [vocab.word2id(w) for w in article_words] # list of word ids; OOVs are represented by the id for UNK token
     
-    # BERT embeddings
-    tokens = tokenizer.tokenize(question)
-    encoded = tokenizer.encode_plus(text = question)
-    self.ques_input = encoded['input_ids']
-    self.ques_input = self.ques_input[:config.max_enc_steps]
-    self.ques_len = len(self.ques_input)
-    # print("QUES: {} \n ENCODE: {}\n\n".format(question, self.ques_input))
+    # vectorised input
+    self.enc_input = ques_vectors[:config.max_enc_steps]
 
-    # Process the abstract
-    abstract = b' '.join(abstract_sentences) # string
-    # abstract_words = abstract.split() # list of strings
-    
-    abstract_words = abstract.replace(b",",b" , ").split()
-    abstract_words = [x.lower() for x in abstract_words]
+    # Process the abstract (intermediate sparql)
+    abstract = abstract.replace('wd:','').replace('wdt:','').replace('ps:','').replace('pq:','').replace('p:','').replace("'"," ' ").lower()
+    abstract_sentences = abstract
+    abstract_words = abstract.split()
 
     abs_ids = [vocab.word2id(w) for w in abstract_words] # list of word ids; OOVs are represented by the id for UNK token
 
@@ -58,12 +52,16 @@ class Example(object):
     self.dec_input, self.target = self.get_dec_inp_targ_seqs(abs_ids, config.max_dec_steps, start_decoding, stop_decoding)
     self.dec_len = len(self.dec_input)
 
+    #print("DEC INPUT: ", self.dec_input)
+    #print("TARGET: ", self.target)
+    #words = [vocab.id2word(w) for w in abs_ids]
+    #print("WORDS: ", words)
     # If using pointer-generator mode, we need to store some extra info
     if config.pointer_gen:
       # Store a version of the enc_input where in-article OOVs are represented by their temporary OOV id; also store the in-article OOVs words themselves
-      self.enc_input_extend_vocab, self.article_oovs = data.article2ids(tokens, vocab)
-      
-      # Get a verison of the reference summary where in-article OOVs are represented by their temporary article OOV id
+      self.enc_input_extend_vocab, self.article_oovs = data.article2ids(article_words, vocab)
+     
+     # Get a verison of the reference summary where in-article OOVs are represented by their temporary article OOV id
       abs_ids_extend_vocab = data.abstract2ids(abstract_words, vocab, self.article_oovs)
 
       # Overwrite decoder target sequence so it uses the temp article OOV ids
@@ -96,14 +94,10 @@ class Example(object):
 
   def pad_encoder_input(self, max_len, pad_id):
     while len(self.enc_input) < max_len:
-      self.enc_input.append(pad_id)
+      self.enc_input.append([pad_id]*vectorisation_len)
     if config.pointer_gen:
       while len(self.enc_input_extend_vocab) < max_len:
         self.enc_input_extend_vocab.append(pad_id)
-
-  def pad_encoder_ques_input(self, max_len, pad_id):
-    while len(self.ques_input) < max_len:
-        self.ques_input.append(pad_id)
     
 
 class Batch(object):
@@ -117,31 +111,23 @@ class Batch(object):
 
   def init_encoder_seq(self, example_list):
     # Determine the maximum length of the encoder input sequence in this batch
-    # max_enc_seq_len = max([ex.enc_len for ex in example_list])
-    max_enc_seq_len = max([ex.ques_len for ex in example_list])
-    max_enc_inp_len = max([ex.enc_len for ex in example_list])
+    max_enc_seq_len = max([ex.enc_len for ex in example_list])
 
     # Pad the encoder input sequences up to the length of the longest sequence
     for ex in example_list:
-      ex.pad_encoder_input(max_enc_seq_len, self.pad_id) # max_enc_seq_len -> max_enc_inp_len
-      ex.pad_encoder_ques_input(max_enc_seq_len, self.pad_id)
+      ex.pad_encoder_input(max_enc_seq_len, self.pad_id) 
 
     # Initialize the numpy arrays
     # Note: our enc_batch can have different length (second dimension) for each batch because we use dynamic_rnn for the encoder.
-    self.enc_batch = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.int32) # inp -> seq
+    self.enc_batch = np.zeros((self.batch_size, max_enc_seq_len, vectorisation_len), dtype=np.float32)
     self.enc_lens = np.zeros((self.batch_size), dtype=np.int32)
-    self.enc_padding_mask = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.float32) # inp->seq
-    # self.ques_batch = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.int32)
+    self.enc_padding_mask = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.float32) 
 
     # Fill in the numpy arrays
     for i, ex in enumerate(example_list):
-      # self.enc_batch[i, :] = ex.enc_input[:]
-      # self.enc_lens[i] = ex.enc_len
-      # padded_ques = pad_sequences([tokenizer.convert_tokens_to_ids(ex.ques_input)], maxlen=max_enc_seq_len, truncating="post", padding="post", dtype="int")
-      # print("PADDED ", padded_ques)
-      self.enc_batch[i, :] = ex.ques_input[:]
-      self.enc_lens[i] = ex.ques_len
-      for j in range(ex.ques_len):  #enc_len -> ques_len
+      self.enc_batch[i, :] = ex.enc_input[:]
+      self.enc_lens[i] = ex.enc_len
+      for j in range(ex.enc_len):
         self.enc_padding_mask[i][j] = 1
 
     # For pointer-generator mode, need to store some extra info
@@ -151,7 +137,7 @@ class Batch(object):
       # Store the in-article OOVs themselves
       self.art_oovs = [ex.article_oovs for ex in example_list]
       # Store the version of the enc_batch that uses the article OOV ids
-      self.enc_batch_extend_vocab = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.int32) # max_enc_seq_len -> max_enc_seq_len
+      self.enc_batch_extend_vocab = np.zeros((self.batch_size, max_enc_seq_len), dtype=np.int32) 
       for i, ex in enumerate(example_list):
         self.enc_batch_extend_vocab[i, :] = ex.enc_input_extend_vocab[:]
 
@@ -244,7 +230,7 @@ class Batcher(object):
 
     while True:
       try:
-        (article, abstract) = next(input_gen) # read the next example from file. article and abstract are both strings.
+        (article, abstract, ques_tokens, ques_vectors) = next(input_gen) # read the next example from file. article and abstract are both strings.
 
       except StopIteration: # if there are no more examples:
         tf.logging.info("The example generator for this example queue filling thread has exhausted data.")
@@ -258,7 +244,7 @@ class Batcher(object):
     
       abstract_sentences = abstract
       # abstract_sentences = [sent.strip() for sent in data.abstract2sents(abstract)] # Use the <s> and </s> tags in abstract to get a list of sentences.
-      example = Example(article, abstract_sentences, self._vocab) # Process into an Example.
+      example = Example(article, abstract_sentences, ques_tokens, ques_vectors, self._vocab) # Process into an Example.
       self._example_queue.put(example) # place the Example in the example queue.
 
   def fill_batch_queue(self):
@@ -311,10 +297,12 @@ class Batcher(object):
     while True:
       e = next(example_generator) # e is a tf.Example
       try:
-        article_text = e.features.feature['article'].bytes_list.value[0] # the article text was saved under the key 'article' in the data files
-        abstract_text = e.features.feature['abstract'].bytes_list.value # the abstract text was saved under the key 'abstract' in the data files
-       # print(article_text)
-       # print(abstract_text)
+        #article_text = e.features.feature['article'].bytes_list.value[0] # the article text was saved under the key 'article' in the data files
+        #abstract_text = e.features.feature['abstract'].bytes_list.value # the abstract text was saved under the key 'abstract' in the data files
+        article_text = e['article']
+        abstract_text = e['abstract']
+        ques_tokens = e['questokens']
+        ques_vectors = e['quesvectors']
       except ValueError:
         tf.compat.v1.logging.error('Failed to get article or abstract from example')
         continue
@@ -322,4 +310,4 @@ class Batcher(object):
         #tf.logging.warning('Found an example with empty article text. Skipping it.')
         continue
       else:
-        yield (article_text, abstract_text)
+        yield (article_text, abstract_text, ques_tokens, ques_vectors)

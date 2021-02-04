@@ -10,13 +10,13 @@ from tensorflow.core.example import example_pb2
 from tensorflow.core.example import feature_pb2
 
 # <s> and </s> are used in the data files to segment the abstracts into sentences. They don't receive vocab ids.
-SENTENCE_START = b'<s>'
-SENTENCE_END = b'</s>'
+SENTENCE_START = '<s>'
+SENTENCE_END = '</s>'
 
-PAD_TOKEN = b'[PAD]' # This has a vocab id, which is used to pad the encoder input, decoder input and target sequence
-UNKNOWN_TOKEN = b'[UNK]' # This has a vocab id, which is used to represent out-of-vocabulary words
-START_DECODING = b'[START]' # This has a vocab id, which is used at the start of every decoder input sequence
-STOP_DECODING = b'[STOP]' # This has a vocab id, which is used at the end of untruncated target sequences
+PAD_TOKEN = '[PAD]' # This has a vocab id, which is used to pad the encoder input, decoder input and target sequence
+UNKNOWN_TOKEN = '[UNK]' # This has a vocab id, which is used to represent out-of-vocabulary words
+START_DECODING = '[START]' # This has a vocab id, which is used at the start of every decoder input sequence
+STOP_DECODING = '[STOP]' # This has a vocab id, which is used at the end of untruncated target sequences
 
 # Note: none of <s>, </s>, [PAD], [UNK], [START], [STOP] should appear in the vocab file.
 
@@ -29,7 +29,7 @@ class Vocab(object):
     self._count = 0 # keeps track of total number of words in the Vocab
 
     # [UNK], [PAD], [START] and [STOP] get the ids 0,1,2,3.
-    for w in [PAD_TOKEN, UNKNOWN_TOKEN, START_DECODING, STOP_DECODING]:
+    for w in [UNKNOWN_TOKEN, PAD_TOKEN, START_DECODING, STOP_DECODING]:
       self._word_to_id[w] = self._count
       self._id_to_word[self._count] = w
       self._count += 1
@@ -41,7 +41,7 @@ class Vocab(object):
        # if len(pieces) != 2:
          # print (f'Warning: incorrectly formatted line in vocabulary file: {line}\n')
          # continue
-        w = bytes(pieces[0], 'utf-8')
+        w = pieces[0]
         # print('Adding %s to vocabulary file' % w)
         if w in [SENTENCE_START, SENTENCE_END, UNKNOWN_TOKEN, PAD_TOKEN, START_DECODING, STOP_DECODING]:
           raise Exception('<s>, </s>, [UNK], [PAD], [START] and [STOP] shouldn\'t be in the vocab file, but %s is' % w)
@@ -83,76 +83,98 @@ def _bytes_feature(value):
     value = value.numpy() # BytesList won't unpack a string from an EagerTensor.
   return feature_pb2.Feature(bytes_list=feature_pb2.BytesList(value=[value]))
 
+def _float_feature(value):
+  """Returns a float_list from a float / double."""
+  return feature_pb2.Feature(float_list=feature_pb2.FloatList(value=[value]))
+
 def example_generator(data_path, single_pass):
-    d = json.loads(open(data_path).read())
-    assert d, ('Error: Empty file at %s' % data_path)  # check filelist isn't empty
 
-    # print(_bytes_feature(b'test_string'))
-    # print(_bytes_feature(bytes('test_string', 'utf-8')))
+    filename = data_path
+    with open(filename) as file_in:
+        for line in file_in:
+            linearr = json.loads(line.strip())
+            uid = linearr[0]
+            question = linearr[1]
+            intermediate_sparql = linearr[8]
+            if not question or not intermediate_sparql:
+                continue
 
-    for item in d:
-        if not item["question"] or not item["intermediate_sparql"]:
-            continue
-        question = item["question"]
-        intermediate_sparql = item["intermediate_sparql"]
-        # intermediate_sparql = '<s>' + item["intermediate_sparql"] + '</s>'
-        dict = {
-            'article': bytes(question, 'utf-8'),
-            'abstract': bytes(intermediate_sparql, 'utf-8')
-        }
+            question = question.replace('{','').replace('}','')
+            intermediate_sparql = intermediate_sparql.replace(","," , ").replace('{',' { ').replace('}',' } ').replace('(',' ( ').replace(')',' ) ')#.replace('.',' . ')
+                         
+            questiontokens = linearr[2]
+            questionvectors = linearr[3]
+            ents = linearr[4]
+            rels = linearr[5]
+            finents = linearr[6]
+            finrels = linearr[7]
+        
 
-       # print(dict['article'])
-       # print(dict['abstract'])
-       # print(_bytes_feature(dict['abstract']))
+            # enc_input = questionvectors[:max_enc_len]
+            # enc_len = len(enc_input)
+            # if enc_len == 0:
+            #    continue
+            # question_words = [w.lower() for w in questiontokens][:max_enc_len]
+            #enc_len = len(question_words)
+            # enc_input_mask = [vocab.word_to_id(w) for w in question_words]
+            # enc_input_extend_vocab, question_oovs = Data_Helper.article_to_ids(question_words, vocab)
 
-        output = example_pb2.Example(features=feature_pb2.Features(feature={
-      'article': _bytes_feature(dict['article']),
-      'abstract': _bytes_feature(dict['abstract'])
-  }))
-        yield output
+            for idx,ent in enumerate(ents):
+                intermediate_sparql = intermediate_sparql.replace(ent,'entpos@@'+str(ents.index(ent)+1))
+            for idx,rel in enumerate(rels):
+                intermediate_sparql = intermediate_sparql.replace(rel,'predpos@@'+str(rels.index(rel)+1))
+            sparqladd = ' [sep] ' + ' '.join(ents) + ' [sep] ' + ' '.join(rels)
+            intermediate_sparql += sparqladd
+                    
+            output = {
+            
+                        'article' : question,
+                        'abstract': intermediate_sparql,
+                        'questokens': questiontokens,
+                        'quesvectors': questionvectors
+            }
+
+            yield output
+            '''
+            dict = {
+                'article': bytes(question, 'utf-8'),
+                'abstract': bytes(intermediate_sparql, 'utf-8')
+            }
+
+
+            print("QUES VEC: ", len(questionvectors))
+            print("11111: ", len(questionvectors[0]))
+            output = example_pb2.Example(features=feature_pb2.Features(feature={
+                'article': _bytes_feature(dict['article']),
+                'abstract': _bytes_feature(dict['abstract']),
+                'quesvectors': _float_feature(questionvectors)
+             }))
+            yield output
+            '''
 
     if single_pass:
         print("example_generator completed reading all datafiles. No more data.")
     return
 
-  # while True:
-  #   filelist = glob.glob(data_path) # get the list of datafiles
-  #   assert filelist, ('Error: Empty filelist at %s' % data_path) # check filelist isn't empty
-  #   if single_pass:
-  #     filelist = sorted(filelist)
-  #   else:
-  #     random.shuffle(filelist)
-  #   for f in filelist:
-  #     reader = open(f, 'rb')
-  #     while True:
-  #       len_bytes = reader.read(8)
-  #       if not len_bytes: break # finished reading this file
-  #       str_len = struct.unpack('q', len_bytes)[0]
-  #       example_str = struct.unpack('%ds' % str_len, reader.read(str_len))[0]
-  #       yield example_pb2.Example.FromString(example_str)
-  #   if single_pass:
-  #     print("example_generator completed reading all datafiles. No more data.")
-  #     break
-
-
 def article2ids(article_words, vocab):
   ids = []
   oovs = []
-  ids.append(0)
   unk_id = vocab.word2id(UNKNOWN_TOKEN)
   for w in article_words:
-
+    
     if len(w) > 2:
         if w[0] == "'" and w[-1] == "'" : #sparql specific hack for handling questions like "which cities start with the letter L "
             w = w[1:-1]
-                                        #print("a2i singlequote: ",article_words,w)
+            # print("a2i singlequote: ",article_words,w)
+
         if w[0] == '"' and w[-1] == '"':
             w = w[1:-1]
-                                        #print("a2i doubequote: ",article_words,w)
+            # print("a2i doubequote: ",article_words,w)
+    
                         
         try:                             #to handle questions like "which buildings have a height larger than 200.50 meters"
             w = str(float(w))
-            #print("a2i float: ",article_words,w)            
+            # print("Article a2i float: ",article_words,w)            
         except ValueError:
             pass
 
@@ -165,7 +187,6 @@ def article2ids(article_words, vocab):
     else:
       ids.append(i)
 
-  ids.append(0)
   return ids, oovs
 
 
@@ -173,6 +194,23 @@ def abstract2ids(abstract_words, vocab, article_oovs):
   ids = []
   unk_id = vocab.word2id(UNKNOWN_TOKEN)
   for w in abstract_words:
+    
+    if len(w) > 2:
+        if w[0] == "'" and w[-1] == "'" : #sparql specific hack for handling questions like "which cities start with the letter L "
+            w = w[1:-1]
+           # print("a2i singlequote: ",abstract_words,w)
+
+        if w[0] == '"' and w[-1] == '"':
+            w = w[1:-1]
+            #print("a2i doubequote: ",abstract_words,w)
+
+                        
+        try:                             #to handle questions like "which buildings have a height larger than 200.50 meters"
+            w = str(float(w))
+            # print("Abstract a2i float: ",abstract_words,w)            
+        except ValueError:
+            pass
+
     i = vocab.word2id(w)
     if i == unk_id: # If w is an OOV word
       if w in article_oovs: # If w is an in-article OOV

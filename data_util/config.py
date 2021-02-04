@@ -2,21 +2,21 @@ import os
 
 root_dir = os.path.expanduser("~")
 
-#train_data_path = os.path.join(root_dir, "ptr_nw/cnn-dailymail-master/finished_files/train.bin")
-train_data_path = os.path.join(root_dir, "pointer_summarizer/data/intermediatesparqls/lcquad2sparqltrainintermed1.json")
-eval_data_path = os.path.join(root_dir, "pointer_summarizer/data/intermediatesparqls/lcquad2sparqltestintermed1.json")
-decode_data_path = os.path.join(root_dir, "pointer_summarizer/data/intermediatesparqls/lcquad2sparqltestintermed1.json")
-vocab_path = os.path.join(root_dir, "pointer_summarizer/wikidatasparqlvocab.txt")
-log_root = os.path.join(root_dir, "pointer_summarizer/log")
+train_data_path = os.path.join(root_dir, "/raid/kaur/lcq2train3.txt")
+#train_data_path = os.path.join(root_dir, "pointer_summarizer/data/intermediatesparqls/lcquad2sparqltrainintermed1.json")
+eval_data_path = os.path.join(root_dir, "/raid/kaur/lcq2test3.txt")
+decode_data_path = os.path.join(root_dir, "/raid/kaur/lcq2test3.txt")
+vocab_path = os.path.join(root_dir, "workspace1-exp1/pointer_summarizer/wikidatasparqlvocabchangevar.txt")
+log_root = os.path.join(root_dir, "workspace1-exp1/pointer_summarizer/log")
 
 # Hyperparameters
 hidden_dim= 256
-emb_dim= 768
+emb_dim= 500
 batch_size= 8
 max_enc_steps=400
 max_dec_steps=100
 beam_size=4
-min_dec_steps=8
+min_dec_steps=0
 vocab_size=50000
 
 lr=0.15
