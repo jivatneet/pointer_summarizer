@@ -68,22 +68,15 @@ def write_for_rouge(reference_sents, decoded_words, ex_index,
 
   decoded_sents = []
   while len(decoded_words) > 0:
-    try:
-      fst_period_idx = decoded_words.index(".")
-    except ValueError:
-      fst_period_idx = len(decoded_words)
+    
+    fst_period_idx = len(decoded_words)
     sent = decoded_words[:fst_period_idx + 1]
 
     new_sent = ""
     for word in sent:
-        try:
-            word = word.decode("utf-8")
-        except (UnicodeDecodeError, AttributeError):
-            pass
-        # word = word.decode('utf-8')
         new_sent += ' ' + word
 
-    new_ref = reference_sents[0].decode('utf-8')
+    new_ref = reference_sents
     decoded_words = decoded_words[fst_period_idx + 1:]
     decoded_sents.append(' '.join(new_sent))
 
