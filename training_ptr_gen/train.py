@@ -98,7 +98,7 @@ class Train(object):
         qcount = 0
         totalfuzz = 0.0
 
-        while qcount < 16:
+        while qcount < 80:
             # Run beam search to get best Hypothesis
             best_summary = self.beam_search(batch)
 
@@ -116,8 +116,10 @@ class Train(object):
 
             original_abstract_sents = batch.original_abstracts_sents[0]
 
-            target, answer = write_for_rouge(original_abstract_sents, decoded_words, counter,
-                                             None, None)
+            target = original_abstract_sents
+            answer = ' '.join(decoded_words)
+            # target, answer = write_for_rouge(original_abstract_sents, decoded_words, counter,
+            #                                 None, None)
 
             qcount += 1
             totalfuzz += fuzz.ratio(target.lower(), answer.lower())
@@ -263,8 +265,8 @@ class Train(object):
         dec_batch, dec_padding_mask, max_dec_len, dec_lens_var, target_batch = \
             get_output_from_batch(batch, use_cuda)
 
-       # print('Enc batch ', enc_batch)
-       # print('Target batch ', target_batch)
+        # print('Enc batch in train', enc_batch)
+        # print('Target batch in train', target_batch)
         self.model.encoder = self.model.encoder.train()
         self.model.decoder = self.model.decoder.train()
         self.model.reduce_state = self.model.reduce_state.train()
@@ -301,6 +303,7 @@ class Train(object):
             step_loss = -torch.log(gold_probs + config.eps)
 
             # label smoothing
+            '''
             log_probs = -torch.log(final_dist + config.eps)
             loss = log_probs.sum(dim = 1)
             K = final_dist.size()[-1]
@@ -308,6 +311,7 @@ class Train(object):
             epsilon = config.ls_eps
             step_loss = epsilon * loss_k + (1 - epsilon) * step_loss
             # step_loss = self.ls_combine(loss_k, step_loss, config.ls_eps)
+            '''
 
             if config.is_coverage:
                 step_coverage_loss = torch.sum(torch.min(attn_dist, coverage), 1)

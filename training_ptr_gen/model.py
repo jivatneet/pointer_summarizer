@@ -63,44 +63,14 @@ class Encoder(nn.Module):
         self.W_h = nn.Linear(config.hidden_dim * 2, config.hidden_dim * 2, bias=False)
 
     #seq_lens should be in descending order
-    def forward(self, input, seq_lens, enc_padding_mask):
-
-        # print("INPUT ", input)
-        # print("SHAPE ",input.shape)
-        # print("LEN ", seq_lens)
+    def forward(self, inp, seq_lens, enc_padding_mask):
         # embedded = self.embedding(input)
-        
-        bert = BertModel.from_pretrained('bert-base-uncased')
-        if use_cuda:
-            bert = bert.cuda()
-
-        bert.eval()
-
-        ques_bert_output = []
-        with torch.no_grad():
-            ques_bert_output = bert(input)
-            # print("EMBED ", ques_bert_output)
-            # print("sh: ", ques_bert_output[0].size())
-            # hidden = ques_bert_output[2]
-            # print("HIDDEN SH: ", hidden.shape)
-            # print(len(hidden))
-            # print(len(hidden[0]))
-            # print(len(hidden[0][0]))
-            # print(len(hidden[0][0][0]))
-            # print("SH: ", hidden[0].size())
-            
-        hidden_state = ques_bert_output[0]
-        # BERT tokenization
-        # question_bert_tokens = self.tz.encode_plus(text = questions, add_special_tokens = True) 
-        # print(question_bert_tokens)
-
-        # if use_cuda:
-        #    question_bert_tokens = question_bert_tokens.cuda()
 
         if config.use_lstm:
-            packed = pack_padded_sequence(hidden_state, seq_lens, batch_first=True, enforce_sorted = False)
+            packed = pack_padded_sequence(inp, seq_lens, batch_first=True)
             output, hidden = self.lstm(packed)
 
+        
             encoder_outputs, _ = pad_packed_sequence(output, batch_first=True)  # h dim = B x t_k x n
             encoder_outputs = encoder_outputs.contiguous()
 
@@ -157,9 +127,6 @@ class Attention(nn.Module):
         e = torch.tanh(att_features) # B * t_k x 2*hidden_dim
         scores = self.v(e)  # B * t_k x 1
         scores = scores.view(-1, t_k)  # B x t_k
-
-        # print("SCORES: ", scores.size())
-        # print("ENC MASK: ", enc_padding_mask.size())
 
         attn_dist_ = torch.softmax(scores, dim=1)*enc_padding_mask # B x t_k
         normalization_factor = attn_dist_.sum(1, keepdim=True)
@@ -235,7 +202,7 @@ class Decoder(nn.Module):
         #output = F.relu(output)
 
         output = self.out2(output) # B x vocab_size
-        # print("DECODER OUT: ", output.size())
+    
         vocab_dist = torch.softmax(output, dim=1)
 
         if config.pointer_gen:
