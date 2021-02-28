@@ -16,14 +16,11 @@ import data_util.data as data
 import random
 random.seed(1234)
 
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 vectorisation_len = 500
 
 class Example(object):
 
   def __init__(self, article, abstract, ques_tokens, ques_vectors, vocab):
-
-    # tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
 
     # Get ids of special tokens
     start_decoding = vocab.word2id(data.START_DECODING)
@@ -42,7 +39,7 @@ class Example(object):
     self.enc_input = ques_vectors[:config.max_enc_steps]
 
     # Process the abstract (intermediate sparql)
-    abstract = abstract.replace('wd:','').replace('wdt:','').replace('ps:','').replace('pq:','').replace('p:','').replace("'"," ' ").lower()
+    abstract = abstract.replace("'"," ' ").lower()
     abstract_sentences = abstract
     abstract_words = abstract.split()
 
@@ -125,6 +122,9 @@ class Batch(object):
 
     # Fill in the numpy arrays
     for i, ex in enumerate(example_list):
+     # for ind, l in enumerate(ex.enc_input):
+     #     if len(l) != 500:
+     #       print("IND: {} len:{}".format(ind, len(l)))
       self.enc_batch[i, :] = ex.enc_input[:]
       self.enc_lens[i] = ex.enc_len
       for j in range(ex.enc_len):

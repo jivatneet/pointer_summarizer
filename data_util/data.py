@@ -99,15 +99,15 @@ def example_generator(data_path, single_pass):
             if not question or not intermediate_sparql:
                 continue
 
-            question = question.replace('{','').replace('}','')
-            intermediate_sparql = intermediate_sparql.replace(","," , ").replace('{',' { ').replace('}',' } ').replace('(',' ( ').replace(')',' ) ')#.replace('.',' . ')
+            question = question #.replace('{','').replace('}','')
+            intermediate_sparql = intermediate_sparql.replace('{',' { ').replace('}',' } ').replace('vr0.','vr0 .').replace('vr1.','vr1 .').replace('COUNT(?','COUNT ( ?').replace('vr0)','vr0 )').replace('vr1)','vr1 )')
                          
             questiontokens = linearr[2]
             questionvectors = linearr[3]
             ents = linearr[4]
             rels = linearr[5]
-            finents = linearr[6]
-            finrels = linearr[7]
+            #finents = linearr[6]
+            #finrels = linearr[7]
         
 
             # enc_input = questionvectors[:max_enc_len]

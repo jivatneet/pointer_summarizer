@@ -49,7 +49,7 @@ class Encoder(nn.Module):
         init_wt_normal(self.embedding.weight)
 
         if config.use_lstm:
-            self.lstm = nn.LSTM(config.emb_dim, config.hidden_dim, num_layers=1, batch_first=True, bidirectional=True)
+            self.lstm = nn.LSTM(config.emb_dim, config.hidden_dim, num_layers=2, batch_first=True, bidirectional=True)
             init_lstm_wt(self.lstm)
         else:
              model_dim = config.emb_dim
@@ -70,7 +70,6 @@ class Encoder(nn.Module):
             packed = pack_padded_sequence(inp, seq_lens, batch_first=True)
             output, hidden = self.lstm(packed)
 
-        
             encoder_outputs, _ = pad_packed_sequence(output, batch_first=True)  # h dim = B x t_k x n
             encoder_outputs = encoder_outputs.contiguous()
 
@@ -93,14 +92,32 @@ class ReduceState(nn.Module):
         self.reduce_c = nn.Linear(config.hidden_dim * 2, config.hidden_dim)
         init_linear_wt(self.reduce_c)
 
-    def forward(self, hidden):
-        h, c = hidden # h, c dim = 2 x b x hidden_dim
-        h_in = h.transpose(0, 1).contiguous().view(-1, config.hidden_dim * 2)
-        hidden_reduced_h = F.relu(self.reduce_h(h_in))
-        c_in = c.transpose(0, 1).contiguous().view(-1, config.hidden_dim * 2)
-        hidden_reduced_c = F.relu(self.reduce_c(c_in))
+    def forward(self, hidden, decode = False):
+        h, c = hidden # h, c dim = 2 x b x hidden_dim -> num_layers*2 x b x hidden_dim
 
-        return (hidden_reduced_h.unsqueeze(0), hidden_reduced_c.unsqueeze(0)) # h, c dim = 1 x b x hidden_dim
+        batch_dim = config.batch_size
+        if decode:
+            batch_dim = config.beam_size
+
+        h = h.view(2, 2, batch_dim, config.hidden_dim)
+        c = c.view(2, 2, batch_dim, config.hidden_dim)
+
+        h_in = h[0].transpose(0, 1).contiguous().view(-1, config.hidden_dim * 2)
+        hidden_reduced_h1 = F.relu(self.reduce_h(h_in))
+        h_in = h[1].transpose(0, 1).contiguous().view(-1, config.hidden_dim * 2)
+        hidden_reduced_h2 = F.relu(self.reduce_h(h_in))
+
+        c_in = c[0].transpose(0, 1).contiguous().view(-1, config.hidden_dim * 2)
+        hidden_reduced_c1 = F.relu(self.reduce_c(c_in))
+        c_in = c[1].transpose(0, 1).contiguous().view(-1, config.hidden_dim * 2)
+        hidden_reduced_c2 = F.relu(self.reduce_c(c_in))
+
+        hidden_h_bilayer = torch.cat((hidden_reduced_h1.unsqueeze(0), hidden_reduced_h2.unsqueeze(0)), dim=0)
+        hidden_c_bilayer = torch.cat((hidden_reduced_c1.unsqueeze(0), hidden_reduced_c2.unsqueeze(0)), dim=0)
+
+        return (hidden_h_bilayer, hidden_c_bilayer) # h, c dim = num_layers x b x hidden_dim
+
+        # return (hidden_reduced_h.unsqueeze(0), hidden_reduced_c.unsqueeze(0)) # h, c dim = 1 x b x hidden_dim
 
 class Attention(nn.Module):
     def __init__(self):
@@ -115,6 +132,10 @@ class Attention(nn.Module):
         b, t_k, n = list(encoder_outputs.size())
 
         dec_fea = self.decode_proj(s_t_hat) # B x 2*hidden_dim
+
+        # print("STHAT: ", s_t_hat.shape)
+        # print("B T_K N: ", b, t_k, n)
+        # print("DEC FEA: ", dec_fea.shape)
         dec_fea_expanded = dec_fea.unsqueeze(1).expand(b, t_k, n).contiguous() # B x t_k x 2*hidden_dim
         dec_fea_expanded = dec_fea_expanded.view(-1, n)  # B * t_k x 2*hidden_dim
 
@@ -154,7 +175,7 @@ class Decoder(nn.Module):
 
         self.x_context = nn.Linear(config.hidden_dim * 2 + config.emb_dim, config.emb_dim)
 
-        self.lstm = nn.LSTM(config.emb_dim, config.hidden_dim, num_layers=1, batch_first=True, bidirectional=False)
+        self.lstm = nn.LSTM(config.emb_dim, config.hidden_dim, num_layers=2, batch_first=True, bidirectional=False)
         init_lstm_wt(self.lstm)
 
         if config.pointer_gen:
@@ -170,6 +191,8 @@ class Decoder(nn.Module):
 
         if not self.training and step == 0:
             h_decoder, c_decoder = s_t_1
+            h_decoder = h_decoder[-1]
+            c_decoder = c_decoder[-1]
             s_t_hat = torch.cat((h_decoder.view(-1, config.hidden_dim),
                                  c_decoder.view(-1, config.hidden_dim)), 1)  # B x 2*hidden_dim
         
@@ -179,9 +202,12 @@ class Decoder(nn.Module):
 
         y_t_1_embd = self.embedding(y_t_1)
         x = self.x_context(torch.cat((c_t_1, y_t_1_embd), 1))
+    
         lstm_out, s_t = self.lstm(x.unsqueeze(1), s_t_1)
 
         h_decoder, c_decoder = s_t
+        h_decoder = h_decoder[-1]
+        c_decoder = c_decoder[-1]
         s_t_hat = torch.cat((h_decoder.view(-1, config.hidden_dim),
                              c_decoder.view(-1, config.hidden_dim)), 1)  # B x 2*hidden_dim
         c_t, attn_dist, coverage_next = self.attention_network(s_t_hat, encoder_outputs, encoder_feature,
