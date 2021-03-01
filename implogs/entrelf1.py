@@ -53,6 +53,14 @@ for idx,line in enumerate(lines):
         print("ANS: ", ans)
         if target == ans:
             exactmatch += 1
+        else:
+            for ind, ele in enumerate(ans):
+                if ele == '?vr0':
+                    ans[ind] = '?vr1'
+                if ele == '?vr1':
+                    ans[ind] = '?vr0'
+            if target == ans:
+                exactmatch += 1
 
         try:
             question,ents,rels = lines[idx].strip().split('[sep]')
