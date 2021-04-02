@@ -2,12 +2,13 @@ import os
 
 root_dir = os.path.expanduser("~")
 
-train_data_path = os.path.join(root_dir, "/raid/kaur/lcq1traingold3.txt")
+train_data_path = os.path.join(root_dir, "/raid/banerjee/qald5traingold2.txt")
 #train_data_path = os.path.join(root_dir, "pointer_summarizer/data/intermediatesparqls/lcquad2sparqltrainintermed1.json")
-eval_data_path = os.path.join(root_dir, "/raid/kaur/lcq1testgold3.txt")
-decode_data_path = os.path.join(root_dir, "/raid/kaur/lcq1testgold3.txt")
-vocab_path = os.path.join(root_dir, "workspace-lcq1/pointer_summarizer/lcq1vocab.txt")
-log_root = os.path.join(root_dir, "workspace-lcq1/pointer_summarizer/log")
+eval_data_path = os.path.join(root_dir, "/raid/banerjee/qald5testgold2.txt")
+#decode_data_path = os.path.join(root_dir, "/raid/kaur/test_lcq1_1000_gold5.txt")
+decode_data_path = os.path.join(root_dir, "/raid/banerjee/qald5testgold2.txt")
+vocab_path = os.path.join(root_dir, "workspace-qald/pointer_summarizer/qald5vocab.txt")
+log_root = os.path.join(root_dir, "/raid/kaur/pointer_summarizer2/log")
 
 # Hyperparameters
 hidden_dim= 256
@@ -31,9 +32,12 @@ cov_loss_wt = 1.0
 
 eps = 1e-12
 ls_eps = 0.1 # label smoothing
-max_iterations = 500000
+max_iterations = 1000000
+max_epochs = 5000
 
 use_gpu=True
 
 lr_coverage=0.15
 use_lstm=True
+dataset_size = 249
+test_size = 42

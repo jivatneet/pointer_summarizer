@@ -100,8 +100,8 @@ def example_generator(data_path, single_pass):
                 continue
 
             question = question #.replace('{','').replace('}','')
-            intermediate_sparql = intermediate_sparql.replace('{',' { ').replace('}',' } ').replace('vr0.','vr0 .').replace('vr1.','vr1 .').replace('COUNT(?','COUNT ( ?').replace('vr0)','vr0 )').replace('vr1)','vr1 )')
-                         
+            intermediate_sparql = intermediate_sparql.replace('vr0.','vr0 .').replace('vr1.','vr1 .').replace('COUNT(?','COUNT ( ?').replace('vr0)','vr0 )').replace('vr1)','vr1 )')
+                        
             questiontokens = linearr[2]
             questionvectors = linearr[3]
             ents = linearr[4]
@@ -123,15 +123,18 @@ def example_generator(data_path, single_pass):
                 intermediate_sparql = intermediate_sparql.replace(ent,'entpos@@'+str(ents.index(ent)+1))
             for idx,rel in enumerate(rels):
                 intermediate_sparql = intermediate_sparql.replace(rel,'predpos@@'+str(rels.index(rel)+1))
-            sparqladd = ' [sep] ' + ' '.join(ents) + ' [sep] ' + ' '.join(rels)
-            intermediate_sparql += sparqladd
+            # sparqladd = ' [sep] ' + ' '.join(ents) + ' [sep] ' + ' '.join(rels)
+            # intermediate_sparql += sparqladd
                     
             output = {
             
                         'article' : question,
                         'abstract': intermediate_sparql,
                         'questokens': questiontokens,
-                        'quesvectors': questionvectors
+                        'quesvectors': questionvectors,
+                        'ents': ents,
+                        'rels':rels,
+                        'uid': uid
             }
 
             yield output
@@ -231,10 +234,15 @@ def outputids2words(id_list, vocab, article_oovs):
     except ValueError as e: # w is OOV
       assert article_oovs is not None, "Error: model produced a word ID that isn't in the vocabulary. This should not happen in baseline (no pointer-generator) mode"
       article_oov_idx = i - vocab.size()
-      try:
-        w = article_oovs[article_oov_idx]
-      except ValueError as e: # i doesn't correspond to an article oov
-        raise ValueError('Error: model produced word ID %i which corresponds to article OOV %i but this example only has %i article OOVs' % (i, article_oov_idx, len(article_oovs)))
+      if article_oov_idx < len(article_oovs):
+          w = article_oovs[article_oov_idx]
+      #try:
+      #  w = article_oovs[article_oov_idx]
+      #except ValueError as e: # i doesn't correspond to an article oov
+      #  raise ValueError('Error: model produced word ID %i which corresponds to article OOV %i but this example only has %i article OOVs' % (i, article_oov_idx, len(article_oovs)))
+      else:
+          print("Error: model produced word ID %i which corresponds to article OOV %i but this example only has %i article OOVs" % (i, article_oov_idx, len(article_oovs)))
+          continue
     words.append(w)
   return words
 

@@ -20,7 +20,7 @@ vectorisation_len = 500
 
 class Example(object):
 
-  def __init__(self, article, abstract, ques_tokens, ques_vectors, vocab):
+  def __init__(self, article, abstract, ques_tokens, ques_vectors, ents, rels, uid, vocab):
 
     # Get ids of special tokens
     start_decoding = vocab.word2id(data.START_DECODING)
@@ -68,6 +68,10 @@ class Example(object):
     self.original_article = article
     self.original_abstract = abstract
     self.original_abstract_sents = abstract_sentences
+    self.question = question
+    self.ents = ents
+    self.rels = rels
+    self.uid = uid
 
 
   def get_dec_inp_targ_seqs(self, sequence, max_len, start_id, stop_id):
@@ -164,6 +168,10 @@ class Batch(object):
     self.original_articles = [ex.original_article for ex in example_list] # list of lists
     self.original_abstracts = [ex.original_abstract for ex in example_list] # list of lists
     self.original_abstracts_sents = [ex.original_abstract_sents for ex in example_list] # list of list of lists
+    self.questions = [ex.question for ex in example_list] # list of lists
+    self.ents = [ex.ents for ex in example_list] # list of lists
+    self.rels = [ex.rels for ex in example_list] # list of lists
+    self.uid = [ex.uid for ex in example_list] # list of lists
 
 
 class Batcher(object):
@@ -230,7 +238,7 @@ class Batcher(object):
 
     while True:
       try:
-        (article, abstract, ques_tokens, ques_vectors) = next(input_gen) # read the next example from file. article and abstract are both strings.
+        (article, abstract, ques_tokens, ques_vectors, ents, rels, uid) = next(input_gen) # read the next example from file. article and abstract are both strings.
 
       except StopIteration: # if there are no more examples:
         tf.logging.info("The example generator for this example queue filling thread has exhausted data.")
@@ -244,7 +252,7 @@ class Batcher(object):
     
       abstract_sentences = abstract
       # abstract_sentences = [sent.strip() for sent in data.abstract2sents(abstract)] # Use the <s> and </s> tags in abstract to get a list of sentences.
-      example = Example(article, abstract_sentences, ques_tokens, ques_vectors, self._vocab) # Process into an Example.
+      example = Example(article, abstract_sentences, ques_tokens, ques_vectors, ents, rels, uid, self._vocab) # Process into an Example.
       self._example_queue.put(example) # place the Example in the example queue.
 
   def fill_batch_queue(self):
@@ -303,6 +311,9 @@ class Batcher(object):
         abstract_text = e['abstract']
         ques_tokens = e['questokens']
         ques_vectors = e['quesvectors']
+        ents = e['ents']
+        rels = e['rels']
+        uid = e['uid']
       except ValueError:
         tf.compat.v1.logging.error('Failed to get article or abstract from example')
         continue
@@ -310,4 +321,4 @@ class Batcher(object):
         #tf.logging.warning('Found an example with empty article text. Skipping it.')
         continue
       else:
-        yield (article_text, abstract_text, ques_tokens, ques_vectors)
+        yield (article_text, abstract_text, ques_tokens, ques_vectors, ents, rels, uid)

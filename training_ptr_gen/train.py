@@ -5,6 +5,8 @@ import time
 import argparse
 import glob
 
+import requests
+
 import tensorflow as tf
 import torch
 from model import Model
@@ -23,6 +25,59 @@ from data_util.utils import write_for_rouge
 from train_util import get_input_from_batch, get_output_from_batch
 
 use_cuda = config.use_gpu and torch.cuda.is_available()
+
+def calcf1(target,answer):
+    if target == answer and not(target == '' and answer == ''):
+        return 1.0
+    try:
+        tb = target['results']['bindings']
+        rb = answer['results']['bindings']
+        tp = 0
+        fp = 0
+        fn = 0
+        for r in rb:
+            if r in tb:
+                tp += 1
+            else:
+                fp += 1
+        for t in tb:
+            if t not in rb:
+                fn += 1
+        precision = tp/float(tp+fp+0.001)
+        recall = tp/float(tp+fn+0.001)
+        f1 = 2*(precision*recall)/(precision+recall+0.001)
+        print("f1: ",f1)
+        return f1
+    except Exception as err:
+        print(err)
+    try:
+        if target['boolean'] == answer['boolean']:
+            print("boolean true/false match")
+            f1 = 1.0
+            print("f1: ",f1)
+        if target['boolean'] != answer['boolean']:
+            print("boolean true/false mismatch")
+            f1 = 0.0
+            print("f1: ",f1)
+            return f1
+    except Exception as err:
+        f1 = 0.0
+        print("f1: ",f1)
+        return f1
+
+def hitkg(query):
+    try:
+        url = 'http://ltcpu1:8892/sparql/'
+        #print(query)
+        query = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  PREFIX dbo: <http://dbpedia.org/ontology/>  PREFIX res: <http://dbpedia.org/resource/> PREFIX dbp: <http://dbpedia.org/property/> ' + query
+        r = requests.get(url, params={'format': 'json', 'query': query})
+        json_format = r.json()
+        #print(entid,json_format)
+        results = json_format
+        return results
+    except Exception as err:
+        print(err)
+        return ''
 
 class Beam(object):
   def __init__(self, tokens, log_probs, state, state1, context, coverage):
@@ -70,9 +125,10 @@ class Train(object):
 
         self.summary_writer = tf.compat.v1.summary.FileWriter(train_dir)
 
-    def save_model(self, running_avg_loss, iter, fuzz = False, fuzzval = None):
+    def save_model(self, running_avg_loss, iter, epochs, fuzz = False, fuzzval = None):
         state = {
             'iter': iter,
+            'epoch': epochs,
             'encoder_state_dict': self.model.encoder.state_dict(),
             'decoder_state_dict': self.model.decoder.state_dict(),
             'reduce_state_dict': self.model.reduce_state.state_dict(),
@@ -84,7 +140,7 @@ class Train(object):
             model_save_path = os.path.join(self.model_dir, 'model_fuzz_%d_%d_%f' % (iter, int(time.time()), fuzzval))
 
         else:
-            model_save_path = os.path.join(self.model_dir, 'model_loss_%d_%d_%f' % (iter, int(time.time()), running_avg_loss))
+            model_save_path = os.path.join(self.model_dir, 'model_loss_%d_%d_%d_%f' % (epochs, iter, int(time.time()), running_avg_loss))
         torch.save(state, model_save_path)
 
 #-----------------------------------------DECODING-------------------------------------------------------------------------#
@@ -99,8 +155,12 @@ class Train(object):
         counter = 0
         qcount = 0
         totalfuzz = 0.0
+        exact_match = 0
+        totf1 = 0
+        avgf1 = 0.0
 
-        while qcount < 100:
+        # run for entire val set
+        while qcount < config.test_size:
             # Run beam search to get best Hypothesis
             best_summary = self.beam_search(batch)
 
@@ -120,6 +180,7 @@ class Train(object):
 
             target = original_abstract_sents
             answer = ' '.join(decoded_words)
+
             # target, answer = write_for_rouge(original_abstract_sents, decoded_words, counter,
             #                                 None, None)
 
@@ -129,11 +190,44 @@ class Train(object):
             print("answer: ", answer, '\n')
             print("avg fuzz after %d questions = %f" % (qcount, float(totalfuzz) / qcount))
             
+            target_ = target.strip().split('[sep]')[0].split()
+            answer_ = answer.strip().split('[sep]')[0].split()
+            if target_ == answer_:
+                exact_match += 1
+                print("exact match after %d quesions = %d" % (qcount, exact_match))
+            target_ = target.split('[sep]')[0]
+            answer_ = answer.split('[sep]')[0]
+            ents_ = batch.ents[0]
+            rels_ = batch.rels[0]
+            for idx1,ent in enumerate(ents_):
+                if ent:
+                    target_ = target_.replace('entpos@@'+str(idx1+1),ent)
+            for idx1,rel in enumerate(rels_):
+                if rel:
+                    target_ = target_.replace('predpos@@'+str(idx1+1),rel)
+            resulttarget = hitkg(target_)
+            for idx1,ent in enumerate(ents_):
+                if ent:
+                    answer_ = answer_.replace('entpos@@'+str(idx1+1),ent)
+            for idx1,rel in enumerate(rels_):
+                if rel:
+                    answer_ = answer_.replace('predpos@@'+str(idx1+1),rel)
+            resultanswer = hitkg(answer_)
+            f1  = calcf1(resulttarget,resultanswer)
+            totf1 += f1
+            avgf1 = totf1/float(qcount)
+
+            print("target ans: ", resulttarget)
+            print("predicted ans: ", resultanswer)
+            print("f1: ", f1)
+            print("avgf1: ", avgf1)
+
             counter += 1
             batch = self.testbatcher.next_batch()
 
         print("Ending validation")
-        return totalfuzz/100.0, qcount
+        #return float(totalfuzz)/qcount, qcount, exact_match
+        return avgf1, exact_match
 
     def beam_search(self, batch):
         # batch should have only one example
@@ -366,13 +460,17 @@ class Train(object):
 
         return loss.item()
 
-    def trainIters(self, n_iters, model_file_path=None):
+    def trainIters(self, n_iters, n_epochs, model_file_path=None):
         iter, running_avg_loss = self.setup_train(model_file_path)
         start = time.time()
         best_fuzz = 0.0
-        while iter < n_iters:
+        bestf1 = 0.0
+        epochs = 0
+
+        while epochs < n_epochs:
             batch = self.batcher.next_batch()
             loss = self.train_one_batch(batch)
+            epochs = (iter*config.batch_size)/config.dataset_size
 
             running_avg_loss = calc_running_avg_loss(loss, running_avg_loss, self.summary_writer, iter)
             iter += 1
@@ -388,24 +486,29 @@ class Train(object):
                 self.model.reduce_state = self.model.reduce_state.eval()
 
                 with torch.no_grad():
-                    valfuzz, qcount = self.decode()
+                    # valfuzz, qcount, exact_match = self.decode()
+                    valf1, exact_match = self.decode()
                 
-                    # write valfuzz to summary_writer
+                    # write valfuzz and val exact match to summary_writer
                     summary = tf.Summary()
-                    tag_name = 'data/val_fuzz'
-                    summary.value.add(tag=tag_name, simple_value=valfuzz)
+                    tag_name = 'data/val_f1'
+                    summary.value.add(tag=tag_name, simple_value=valf1)
+                    tag_name = 'data/val_exact_match'
+                    summary.value.add(tag=tag_name, simple_value=exact_match)
                     self.summary_writer.add_summary(summary, iter)
+                    
 
                     # update best valiation set accuracy
-                    if valfuzz > best_fuzz:
-                        print("Updating best model. Earlier fuzz: {} New best: {}".format(best_fuzz, valfuzz))
-                        best_fuzz = valfuzz
+                    if valf1 > bestf1:
+                        print("Updating best model. Earlier f1: {} New best: {}".format(bestf1, valf1))
+                        bestf1 = valf1
 
                         snapshot_prefix = os.path.join(self.model_dir, 'best_snapshot')
-                        snapshot_path = snapshot_prefix + '_loss_{}_fuzz_{}'.format(running_avg_loss, best_fuzz)
+                        snapshot_path = snapshot_prefix + '_epochs_{}_loss_{}_f1_{}'.format(epochs, running_avg_loss, bestf1)
 
                         state = {
                              'iter': iter,
+                             'epoch': epochs,
                              'encoder_state_dict': self.model.encoder.state_dict(),
                              'decoder_state_dict': self.model.decoder.state_dict(),
                              'reduce_state_dict': self.model.reduce_state.state_dict(),
@@ -419,13 +522,13 @@ class Train(object):
                             if f != snapshot_path:
                                 os.remove(f)
 
-            print_interval = 1000
+            print_interval = 100
             if iter % print_interval == 0:
-                print('steps %d, seconds for %d batch: %.2f , loss: %f' % (iter, print_interval,
+                print('epochs %d, steps %d, seconds for %d batch: %.2f , loss: %f' % (epochs, iter, print_interval,
                                                                            time.time() - start, loss))
                 start = time.time()
-            if iter % 1000 == 0:
-                self.save_model(running_avg_loss, iter)
+            if epochs % 10 == 0:
+                self.save_model(running_avg_loss, iter, epochs)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Train script")
@@ -437,4 +540,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     
     train_processor = Train()
-    train_processor.trainIters(config.max_iterations, args.model_file_path)
+    train_processor.trainIters(config.max_iterations, config.max_epochs, args.model_file_path)
