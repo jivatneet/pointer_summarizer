@@ -30,7 +30,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 predpos@@2 . }",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type foaf:person . ?vr0 predpos@@2 entpos@@1 . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 rdf:type predpos@@2 . }",
-        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 \" . }"
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 \" . }",
+        "exact_match": "match"
     },
     {
         "uid": "2",
@@ -63,7 +64,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 \" . }",
         "answer_7": "ask where { ?vr0 rdf:type predpos@@1 . entpos@@1 predpos@@2 ' . }",
         "answer_8": "ask where { ?vr0 rdf:type rdf:type predpos@@1 entpos@@1 . }",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "3",
@@ -98,7 +100,8 @@
         "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@2 ?vr1 . ?vr0 predpos@@1 ?vr0 . }",
         "answer_7": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
         "answer_8": "select distinct ?vr0 where { entpos@@1 predpos@@2 ?vr0 . ?vr0 predpos@@1 entpos@@2 . }",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "no match"
     },
     {
         "uid": "4",
@@ -128,7 +131,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ' . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 . }",
-        "answer_9": "select count { { ?vr0 rdf:type predpos@@1 . }"
+        "answer_9": "select count { { ?vr0 rdf:type predpos@@1 . }",
+        "exact_match": "no match"
     },
     {
         "uid": "5",
@@ -163,7 +167,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . }",
         "answer_7": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 . ?vr0 rdfs:label . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@2 . }",
-        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 . ?vr0 predpos@@3 . }"
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 . ?vr0 predpos@@3 . }",
+        "exact_match": "match"
     },
     {
         "uid": "6",
@@ -197,7 +202,8 @@
         "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@2 ?vr1 . ?vr0 rdf:type predpos@@1 . ?vr0 rdfs:label ?vr2 . }",
         "answer_7": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr0 rdf:type rdf:type . ?vr0 rdfs:label . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type foaf:person . ?vr0 predpos@@2 entpos@@1 . }",
-        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type optional . ?vr0 predpos@@2 entpos@@1 . }"
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type optional . ?vr0 predpos@@2 entpos@@1 . }",
+        "exact_match": "no match"
     },
     {
         "uid": "7",
@@ -236,7 +242,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . { ?vr0 predpos@@3 entpos@@2 . }",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr0 . entpos@@1 entpos@@2 entpos@@2 . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr0 . entpos@@1 predpos@@3 entpos@@2 . }",
-        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr0 . entpos@@1 entpos@@2 . }"
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr0 . entpos@@1 entpos@@2 . }",
+        "exact_match": "no match"
     },
     {
         "uid": "8",
@@ -269,7 +276,8 @@
         "answer_6": "ask where { entpos@@1 predpos@@1 entpos@@2 } }",
         "answer_7": "ask predpos@@1 { entpos@@1 predpos@@1 entpos@@2 . }",
         "answer_8": "ask",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "9",
@@ -302,7 +310,8 @@
         "answer_6": "select where ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
         "answer_7": "select ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "10",
@@ -338,7 +347,8 @@
         "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 . }",
         "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . } filter",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "no match"
     },
     {
         "uid": "11",
@@ -370,7 +380,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
         "answer_7": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 \" lennon ?vr1 . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "no match"
     },
     {
         "uid": "14",
@@ -411,7 +422,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 ?vr0 predpos@@2 ?vr0 predpos@@2 entpos@@1 .",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 ?vr0 predpos@@1 ?vr0 predpos@@2 entpos@@1 }",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 ?vr0 predpos@@2 }",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "no match"
     },
     {
         "uid": "15",
@@ -450,7 +462,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by ?vr0 having ( ?vr1 ?vr1 limit limit",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by ?vr0 having ( ?vr1 ) limit 1",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by ?vr0 having ( ?vr1 ) limit (",
-        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . }"
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . }",
+        "exact_match": "no match"
     },
     {
         "uid": "16",
@@ -483,7 +496,8 @@
         "answer_6": "ask where { optional predpos@@1 ?vr0 . }",
         "answer_7": "ask where { optional ?vr0 predpos@@1 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "17",
@@ -530,7 +544,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 rdf:type predpos@@2 . ?vr0 rdf:type predpos@@3 . ?vr1 predpos@@4 entpos@@1 . }",
         "answer_7": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr1 . ?vr0 predpos@@3 ?vr1 . ?vr1 predpos@@4 entpos@@1 . }",
         "answer_8": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 rdf:type predpos@@2 . ?vr0 rdf:type ?vr1 . ?vr1 predpos@@4 entpos@@1 . }",
-        "answer_9": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr1 . ?vr1 rdf:type predpos@@3 . ?vr1 predpos@@4 entpos@@1 . }"
+        "answer_9": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr1 . ?vr1 rdf:type predpos@@3 . ?vr1 predpos@@4 entpos@@1 . }",
+        "exact_match": "no match"
     },
     {
         "uid": "18",
@@ -563,7 +578,8 @@
         "answer_6": "select count ( distinct ?vr0 ' where entpos@@1 entpos@@1 entpos@@1 . }",
         "answer_7": "select count ( distinct ?vr0 ) where entpos@@1 { entpos@@1 predpos@@1 .",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "19",
@@ -595,7 +611,8 @@
         "answer_6": "select distinct ( where { entpos@@1 ?vr0 predpos@@1 . }",
         "answer_7": "select select ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "22",
@@ -633,7 +650,8 @@
         "answer_6": "select distinct ?vr0 where { predpos@@2 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
         "answer_7": "order where { ?vr0 predpos@@1 ?vr1 predpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "no match"
     },
     {
         "uid": "23",
@@ -674,7 +692,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by ?vr1 ?vr1 limit . }",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order",
-        "answer_9": "select ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }"
+        "answer_9": "select ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "exact_match": "no match"
     },
     {
         "uid": "24",
@@ -718,7 +737,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 entpos@@2 entpos@@2 . }",
         "answer_7": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 rdf:type predpos@@2 . ?vr0 predpos@@1 entpos@@2 . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@1 entpos@@2 . }",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "no match"
     },
     {
         "uid": "25",
@@ -755,7 +775,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type [UNK] predpos@@1 entpos@@1 entpos@@1 entpos@@1 . }",
         "answer_7": "select distinct where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . } }",
-        "answer_9": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 rdf:type predpos@@2 . }"
+        "answer_9": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 rdf:type predpos@@2 . }",
+        "exact_match": "no match"
     },
     {
         "uid": "26",
@@ -791,7 +812,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . entpos@@1 predpos@@2 ?vr0 . }",
         "answer_7": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@2 . }",
         "answer_8": "ask where { ?vr0 predpos@@1 ?vr0 predpos@@1 . ?vr0 predpos@@2 . }",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "27",
@@ -827,7 +849,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 foaf:surname predpos@@1 . { ?vr0 predpos@@2 ?vr1 . } union { ?vr0 predpos@@3 ?vr1 . } filter ( ?vr1 > [UNK] ' ) } }",
         "answer_7": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 ?vr0 . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 ?vr2 . }",
-        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . . union predpos@@3 predpos@@3 . }"
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . . union predpos@@3 predpos@@3 . }",
+        "exact_match": "match"
     },
     {
         "uid": "28",
@@ -867,7 +890,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@2 ?vr1 . filter ( regex ( [UNK] ' entpos@@1 ) }",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@2 ?vr1 . filter ( ?vr0 entpos@@1 entpos@@1 }",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@2 ?vr1 . filter ( ?vr0 entpos@@1 && }",
-        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . }"
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . }",
+        "exact_match": "no match"
     },
     {
         "uid": "29",
@@ -909,7 +933,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . { ?vr0 predpos@@2 entpos@@2 . } union { ?vr0 predpos@@4 ?vr1 . ?vr1 predpos@@4 entpos@@2 . } }",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@2 ?vr1 . ?vr1 predpos@@4 entpos@@1 . } }",
         "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . { ?vr0 predpos@@2 entpos@@2 . } union { ?vr0 predpos@@3 ?vr1 . ?vr1 predpos@@4 entpos@@2 } }",
-        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . { ?vr0 predpos@@2 entpos@@2 . }"
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . { ?vr0 predpos@@2 entpos@@2 . }",
+        "exact_match": "match"
     },
     {
         "uid": "30",
@@ -941,7 +966,8 @@
         "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . } }",
         "answer_7": "select select where { ?vr0 predpos@@1 entpos@@1 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "32",
@@ -974,7 +1000,8 @@
         "answer_6": "select select where { entpos@@1 predpos@@1 ?vr0 . }",
         "answer_7": "select select where { ?vr0 predpos@@1 entpos@@1 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "33",
@@ -1006,7 +1033,8 @@
         "answer_6": "ask where { optional { ?vr0 [UNK] rdfs:label ' ' ' ' @en @en . }",
         "answer_7": "ask where { optional { ?vr0 [UNK] ' ' ' @en ' @en entpos@@1 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "34",
@@ -1045,7 +1073,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order order desc ( ?vr1 ) limit 1",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) limit 1 1",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) limit limit 1",
-        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) limit 1 limit"
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) limit 1 limit",
+        "exact_match": "no match"
     },
     {
         "uid": "35",
@@ -1084,7 +1113,8 @@
         "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@1 entpos@@2 . ?vr0 predpos@@2 ?vr0 . }",
         "answer_7": "select distinct ?vr0 where { entpos@@1 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr0 . }",
         "answer_8": "",
-        "answer_9": "select"
+        "answer_9": "select",
+        "exact_match": "no match"
     },
     {
         "uid": "37",
@@ -1121,7 +1151,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) limit offset",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 entpos@@1 . }",
         "answer_8": "select distinct distinct where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
-        "answer_9": "select distinct ?vr0 where { { ?vr0 rdf:type predpos@@1 . }"
+        "answer_9": "select distinct ?vr0 where { { ?vr0 rdf:type predpos@@1 . }",
+        "exact_match": "match"
     },
     {
         "uid": "38",
@@ -1158,7 +1189,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 predpos@@2 . }",
         "answer_7": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ' . }",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "no match"
     },
     {
         "uid": "39",
@@ -1195,7 +1227,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@3 entpos@@2 . } }",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@2 . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@2 entpos@@2 . } } }",
-        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . }"
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . }",
+        "exact_match": "no match"
     },
     {
         "uid": "40",
@@ -1235,7 +1268,8 @@
         "answer_6": "ask where { entpos@@1 predpos@@1 entpos@@2 . }",
         "answer_7": "",
         "answer_8": "ask",
-        "answer_9": "select"
+        "answer_9": "select",
+        "exact_match": "no match"
     },
     {
         "uid": "41",
@@ -1267,7 +1301,8 @@
         "answer_6": "ask where { entpos@@1 predpos@@1 ' [UNK] ' @en . }",
         "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "43",
@@ -1300,7 +1335,8 @@
         "answer_6": "select distinct distinct where { entpos@@1 predpos@@1 ?vr0 . }",
         "answer_7": "select distinct where { entpos@@1 predpos@@1 ?vr0 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "45",
@@ -1333,7 +1369,8 @@
         "answer_6": "ask where { entpos@@1 predpos@@1 ' [UNK] ' @en ' @en ' @en @en . }",
         "answer_7": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
         "answer_8": "ask",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "no match"
     },
     {
         "uid": "46",
@@ -1365,7 +1402,8 @@
         "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . } }",
         "answer_7": "select select where { ?vr0 predpos@@1 entpos@@1 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "no match"
     },
     {
         "uid": "47",
@@ -1398,7 +1436,8 @@
         "answer_6": "select distinct ( where { entpos@@1 predpos@@1 ?vr0 . }",
         "answer_7": "select ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
         "answer_8": "select",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     },
     {
         "uid": "48",
@@ -1445,7 +1484,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@3 entpos@@1 . { ?vr0 predpos@@3 entpos@@1 } union { ?vr1 predpos@@3 predpos@@3 . ?vr2 predpos@@5 entpos@@1 } }",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@3 entpos@@1 . { ?vr0 predpos@@3 entpos@@1 } union { ?vr1 predpos@@3 ?vr2 . ?vr2 predpos@@5 entpos@@1 } }",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . { union predpos@@3 predpos@@3 entpos@@1 } union { ?vr0 predpos@@3 entpos@@1 . }",
-        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . { ?vr0 predpos@@3 entpos@@1 } union { ?vr0 predpos@@3 ?vr1 . } group ( xsd:integer ( ) ("
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . { ?vr0 predpos@@3 entpos@@1 } union { ?vr0 predpos@@3 ?vr1 . } group ( xsd:integer ( ) (",
+        "exact_match": "no match"
     },
     {
         "uid": "49",
@@ -1482,7 +1522,8 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@3 ?vr1 . filter regex ?vr1 [UNK] ' [UNK] ' ) . } }",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@3 ?vr1 . filter regex ?vr1 [UNK] ' [UNK] ' ) . }",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@3 ?vr1 . filter regex ( [UNK] ' [UNK] ' ) . } }",
-        "answer_9": "select distinct ?vr0 where { { ?vr0 rdf:type predpos@@1 . }"
+        "answer_9": "select distinct ?vr0 where { { ?vr0 rdf:type predpos@@1 . }",
+        "exact_match": "no match"
     },
     {
         "uid": "50",
@@ -1513,6 +1554,7 @@
         "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . filter ( ?vr1 < ) }",
         "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 offset 0 limit 1",
         "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit",
-        "answer_9": ""
+        "answer_9": "",
+        "exact_match": "match"
     }
 ]
