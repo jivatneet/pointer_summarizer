@@ -2,10 +2,8 @@ import os
 
 root_dir = os.path.expanduser("~")
 
-train_data_path = os.path.join(root_dir, "/raid/banerjee/qald5traingold2.txt")
-#train_data_path = os.path.join(root_dir, "pointer_summarizer/data/intermediatesparqls/lcquad2sparqltrainintermed1.json")
+train_data_path = os.path.join(root_dir, "/raid/banerjee/qald5.311.merged.txt")
 eval_data_path = os.path.join(root_dir, "/raid/banerjee/qald5testgold2.txt")
-#decode_data_path = os.path.join(root_dir, "/raid/kaur/test_lcq1_1000_gold5.txt")
 decode_data_path = os.path.join(root_dir, "/raid/banerjee/qald5testgold2.txt")
 vocab_path = os.path.join(root_dir, "workspace-qald/pointer_summarizer/qald5vocab.txt")
 log_root = os.path.join(root_dir, "/raid/kaur/pointer_summarizer2/log")

@@ -120,6 +120,11 @@ class BeamSearch(object):
                 res['answer_{}'.format(idx)] = answer
                 print('answer_{}: {}'.format(idx, answer))
 
+            if res['target'].split() == res['answer_0'].split():
+                res['exact_match'] = 'match'
+            else:
+                res['exact_match'] = 'no match'
+
             out.append(res)
 
             qcount += 1
@@ -259,7 +264,7 @@ if __name__ == '__main__':
     file_out = open(sys.argv[2], 'w')
     beam_Search_processor = BeamSearch(model_filename)
     beam_Search_processor.decode()
-    file_out.write(json.dumps(out, indent=4, sort_keys=True))
+    file_out.write(json.dumps(out, indent=4, sort_keys=False))
     file_out.close()
 
 

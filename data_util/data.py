@@ -87,11 +87,17 @@ def _float_feature(value):
   """Returns a float_list from a float / double."""
   return feature_pb2.Feature(float_list=feature_pb2.FloatList(value=[value]))
 
-def example_generator(data_path, single_pass):
+def example_generator(data_path, single_pass, validids=None):
 
     filename = data_path
+    linecount = 1
     with open(filename) as file_in:
         for line in file_in:
+            if linecount not in validids:
+                linecount += 1
+                continue
+            linecount += 1
+    
             linearr = json.loads(line.strip())
             uid = linearr[0]
             question = linearr[1]
@@ -99,9 +105,9 @@ def example_generator(data_path, single_pass):
             if not question or not intermediate_sparql:
                 continue
 
-            question = question #.replace('{','').replace('}','')
-            intermediate_sparql = intermediate_sparql.replace('vr0.','vr0 .').replace('vr1.','vr1 .').replace('COUNT(?','COUNT ( ?').replace('vr0)','vr0 )').replace('vr1)','vr1 )')
-                        
+            question = question.replace('?', ' ?') #.replace('{','').replace('}','')
+            intermediate_sparql = intermediate_sparql.replace('vr0.','vr0 .').replace('vr1.','vr1 .').replace('COUNT(?','COUNT ( ?').replace('vr0)','vr0 )').replace('vr1)','vr1 )').replace('(?','( ?')
+                                 
             questiontokens = linearr[2]
             questionvectors = linearr[3]
             ents = linearr[4]

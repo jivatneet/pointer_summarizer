@@ -4,6 +4,7 @@ import os
 import time
 import argparse
 import glob
+import random
 
 import requests
 
@@ -67,16 +68,16 @@ def calcf1(target,answer):
 
 def hitkg(query):
     try:
-        url = 'http://ltcpu1:8892/sparql/'
+        url = 'http://ltdocker:8894/sparql/'
         #print(query)
-        query = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  PREFIX dbo: <http://dbpedia.org/ontology/>  PREFIX res: <http://dbpedia.org/resource/> PREFIX dbp: <http://dbpedia.org/property/> ' + query
+        query = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  PREFIX dbo: <http://dbpedia.org/ontology/>  PREFIX res: <http://dbpedia.org/resource/> PREFIX dbp: <http://dbpedia.org/property/> PREFIX yago: <http://dbpedia.org/class/yago/> ' + query
         r = requests.get(url, params={'format': 'json', 'query': query})
         json_format = r.json()
         #print(entid,json_format)
         results = json_format
         return results
     except Exception as err:
-        print(err)
+        print(query," -> no response ",err)
         return ''
 
 class Beam(object):
@@ -105,14 +106,30 @@ class Beam(object):
     return sum(self.log_probs) / len(self.tokens)
 
 class Train(object):
-    def __init__(self):
+    def __init__(self, fold=None):
         self.vocab = Vocab(config.vocab_path, config.vocab_size)
-        self.batcher = Batcher(config.train_data_path, self.vocab, mode='train',
+
+        random.seed(fold)
+        ids = [x for x in range(1,312)]
+        random.shuffle(ids)
+        trainids = [x for x in ids[:218]]
+        devids = [x for x in ids[218:249]]
+        testids = [x for x in ids[249:]]
+        
+        self.train_size = len(trainids)
+        self.dev_size = len(devids)
+        self.test_size = len(testids)
+
+        self.batcher = Batcher(config.train_data_path, self.vocab, trainids, mode='train',
                                batch_size=config.batch_size, single_pass=False)
+        print("TRAIN")
         
-        self.testbatcher = Batcher(config.eval_data_path, self.vocab, mode='decode',
+        self.devbatcher = Batcher(config.train_data_path, self.vocab, devids, mode='decode',
+                batch_size=config.beam_size, single_pass=False)
+        print("VAL")
+        self.testbatcher = Batcher(config.train_data_path, self.vocab, testids, mode='decode',
                               batch_size=config.beam_size, single_pass=False)
-        
+        print("TEST")
         time.sleep(15)
 
         train_dir = os.path.join(config.log_root, 'train_%d' % (int(time.time())))
@@ -148,10 +165,10 @@ class Train(object):
         return sorted(beams, key=lambda h: h.avg_log_prob, reverse=True)
 
 
-    def decode(self):
+    def decode(self, batcher, split_size):
 
         print("Starting validation")
-        batch = self.testbatcher.next_batch()
+        batch = batcher.next_batch()
         counter = 0
         qcount = 0
         totalfuzz = 0.0
@@ -160,7 +177,7 @@ class Train(object):
         avgf1 = 0.0
 
         # run for entire val set
-        while qcount < config.test_size:
+        while qcount < split_size:
             # Run beam search to get best Hypothesis
             best_summary = self.beam_search(batch)
 
@@ -187,7 +204,7 @@ class Train(object):
             qcount += 1
             totalfuzz += fuzz.ratio(target.lower(), answer.lower())
             print("target: ", target)
-            print("answer: ", answer, '\n')
+            print("answer: ", answer)
             print("avg fuzz after %d questions = %f" % (qcount, float(totalfuzz) / qcount))
             
             target_ = target.strip().split('[sep]')[0].split()
@@ -220,10 +237,10 @@ class Train(object):
             print("target ans: ", resulttarget)
             print("predicted ans: ", resultanswer)
             print("f1: ", f1)
-            print("avgf1: ", avgf1)
+            print("avgf1: ", avgf1. '\n')
 
             counter += 1
-            batch = self.testbatcher.next_batch()
+            batch = batcher.next_batch()
 
         print("Ending validation")
         #return float(totalfuzz)/qcount, qcount, exact_match
@@ -464,13 +481,15 @@ class Train(object):
         iter, running_avg_loss = self.setup_train(model_file_path)
         start = time.time()
         best_fuzz = 0.0
-        bestf1 = 0.0
+        bestdevf1 = 0.0
+        bestdevtestf1 = 0.0
+        besttestf1 = 0.0
         epochs = 0
 
         while epochs < n_epochs:
             batch = self.batcher.next_batch()
             loss = self.train_one_batch(batch)
-            epochs = (iter*config.batch_size)/config.dataset_size
+            epochs = (iter*config.batch_size)/self.train_size
 
             running_avg_loss = calc_running_avg_loss(loss, running_avg_loss, self.summary_writer, iter)
             iter += 1
@@ -487,24 +506,30 @@ class Train(object):
 
                 with torch.no_grad():
                     # valfuzz, qcount, exact_match = self.decode()
-                    valf1, exact_match = self.decode()
+                    devf1, dev_exact_match = self.decode(self.devbatcher, self.dev_size)
+                    testf1, test_exact_match = self.decode(self.testbatcher, self.test_size)
                 
                     # write valfuzz and val exact match to summary_writer
                     summary = tf.Summary()
                     tag_name = 'data/val_f1'
-                    summary.value.add(tag=tag_name, simple_value=valf1)
+                    summary.value.add(tag=tag_name, simple_value=devf1)
                     tag_name = 'data/val_exact_match'
-                    summary.value.add(tag=tag_name, simple_value=exact_match)
+                    summary.value.add(tag=tag_name, simple_value=dev_exact_match)
+                    tag_name = 'data/test_f1'
+                    summary.value.add(tag=tag_name, simple_value=testf1)
+                    tag_name = 'data/test_exact_match'
+                    summary.value.add(tag=tag_name, simple_value=test_exact_match)
                     self.summary_writer.add_summary(summary, iter)
                     
 
                     # update best valiation set accuracy
-                    if valf1 > bestf1:
-                        print("Updating best model. Earlier f1: {} New best: {}".format(bestf1, valf1))
-                        bestf1 = valf1
+                    if testf1 > besttestf1:
+                        print("Best test f1 so far: %f"%(testf1))
+                        print("Updating best model. Earlier f1: {} New best: {}".format(besttestf1, testf1))
+                        besttestf1 = testf1
 
-                        snapshot_prefix = os.path.join(self.model_dir, 'best_snapshot')
-                        snapshot_path = snapshot_prefix + '_epochs_{}_loss_{}_f1_{}'.format(epochs, running_avg_loss, bestf1)
+                        snapshot_prefix = os.path.join(self.model_dir, 'best_test_snapshot')
+                        snapshot_path = snapshot_prefix + '_epochs_{}_loss_{}_f1_{}'.format(epochs, running_avg_loss, besttestf1)
 
                         state = {
                              'iter': iter,
@@ -522,6 +547,33 @@ class Train(object):
                             if f != snapshot_path:
                                 os.remove(f)
 
+                    if devf1 > bestdevf1:
+                        print("Best dev f1 so far: %f"%(devf1))
+                        bestdevtestf1 = testf1
+                        print("Updating best model. Earlier f1: {} New best: {}".format(bestdevf1, devf1))
+                        bestdevf1 = devf1
+
+                        snapshot_prefix = os.path.join(self.model_dir, 'best_dev_snapshot')
+                        snapshot_path = snapshot_prefix + '_epochs_{}_loss_{}_f1_{}'.format(epochs, running_avg_loss, bestdevf1)
+
+                        state = {
+                             'iter': iter,
+                             'epoch': epochs,
+                             'encoder_state_dict': self.model.encoder.state_dict(),
+                             'decoder_state_dict': self.model.decoder.state_dict(),
+                             'reduce_state_dict': self.model.reduce_state.state_dict(),
+                             'optimizer': self.optimizer.state_dict(),
+                             'current_loss': running_avg_loss
+                         }
+
+                        # save model, delete previous 'best_snapshot' files
+                        torch.save(state, snapshot_path)
+                        for f in glob.glob(snapshot_prefix + '*'):
+                            if f != snapshot_path:
+                                os.remove(f)
+
+                    print("testf1: %f - devf1: %f - bestdevf1: %f - bestdevtestf1: %f - besttestf1 %f "%(testf1,devf1,bestdevf1,bestdevtestf1,besttestf1))
+
             print_interval = 100
             if iter % print_interval == 0:
                 print('epochs %d, steps %d, seconds for %d batch: %.2f , loss: %f' % (epochs, iter, print_interval,
@@ -537,7 +589,8 @@ if __name__ == '__main__':
                         required=False,
                         default=None,
                         help="Model file for retraining (default: None).")
+    parser.add_argument("--fold",  help="k cross fold number", type=int)
     args = parser.parse_args()
     
-    train_processor = Train()
+    train_processor = Train(args.fold)
     train_processor.trainIters(config.max_iterations, config.max_epochs, args.model_file_path)

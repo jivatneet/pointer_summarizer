@@ -177,12 +177,13 @@ class Batch(object):
 class Batcher(object):
   BATCH_QUEUE_MAX = 100 # max number of batches the batch_queue can hold
 
-  def __init__(self, data_path, vocab, mode, batch_size, single_pass):
+  def __init__(self, data_path, vocab, validids, mode, batch_size, single_pass):
     self._data_path = data_path
     self._vocab = vocab
     self._single_pass = single_pass
     self.mode = mode
     self.batch_size = batch_size
+    self.validids = validids
     # Initialize a queue of Batches waiting to be used, and a queue of Examples waiting to be batched
     self._batch_queue = queue.Queue(self.BATCH_QUEUE_MAX)
     self._example_queue = queue.Queue(self.BATCH_QUEUE_MAX * self.batch_size)
@@ -234,7 +235,7 @@ class Batcher(object):
     return batch
 
   def fill_example_queue(self):
-    input_gen = self.text_generator(data.example_generator(self._data_path, self._single_pass))
+    input_gen = self.text_generator(data.example_generator(self._data_path, self._single_pass, self.validids))
 
     while True:
       try:
