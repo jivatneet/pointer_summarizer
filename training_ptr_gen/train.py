@@ -108,14 +108,27 @@ class Beam(object):
 class Train(object):
     def __init__(self, fold=None):
         self.vocab = Vocab(config.vocab_path, config.vocab_size)
+        self.fold = fold
 
-        random.seed(fold)
         ids = [x for x in range(1,312)]
-        random.shuffle(ids)
-        trainids = [x for x in ids[:218]]
-        devids = [x for x in ids[218:249]]
-        testids = [x for x in ids[249:]]
-        
+        length = int(len(ids)/5) #length of each fold
+        folds = []
+        for i in range(5):
+            folds += [ids[i*length:(i+1)*length]]
+        folds += [ids[5*length:len(ids)]]
+        testids = folds[self.fold-1]
+        trainids_ = []
+        for i in range(5):
+            if self.fold - 1 == i:
+                continue
+            trainids_ += folds[i]
+        trainids = trainids_[:217]
+        devids = trainids_[217:]
+        print("fold:", self.fold)
+        print("trainids:", trainids,len(trainids))
+        print("testids:",testids,len(testids))
+        print("devids:",devids,len(devids)) 
+               
         self.train_size = len(trainids)
         self.dev_size = len(devids)
         self.test_size = len(testids)
