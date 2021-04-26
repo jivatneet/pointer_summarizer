@@ -122,23 +122,23 @@ class Train(object):
             if self.fold - 1 == i:
                 continue
             trainids_ += folds[i]
-        trainids = trainids_[:217]
-        devids = trainids_[217:]
+        trainids = trainids_ #[:248]
+        # devids = trainids_[217:]
         print("fold:", self.fold)
         print("trainids:", trainids,len(trainids))
         print("testids:",testids,len(testids))
-        print("devids:",devids,len(devids)) 
+        # print("devids:",devids,len(devids)) 
                
         self.train_size = len(trainids)
-        self.dev_size = len(devids)
+        # self.dev_size = len(devids)
         self.test_size = len(testids)
 
         self.batcher = Batcher(config.train_data_path, self.vocab, trainids, mode='train',
                                batch_size=config.batch_size, single_pass=False)
         print("TRAIN")
         
-        self.devbatcher = Batcher(config.train_data_path, self.vocab, devids, mode='decode',
-                batch_size=config.beam_size, single_pass=False)
+        #self.devbatcher = Batcher(config.train_data_path, self.vocab, devids, mode='decode',
+        #        batch_size=config.beam_size, single_pass=False)
         print("VAL")
         self.testbatcher = Batcher(config.train_data_path, self.vocab, testids, mode='decode',
                               batch_size=config.beam_size, single_pass=False)
@@ -250,7 +250,7 @@ class Train(object):
             print("target ans: ", resulttarget)
             print("predicted ans: ", resultanswer)
             print("f1: ", f1)
-            print("avgf1: ", avgf1. '\n')
+            print("avgf1: ", avgf1, '\n')
 
             counter += 1
             batch = batcher.next_batch()
@@ -519,15 +519,17 @@ class Train(object):
 
                 with torch.no_grad():
                     # valfuzz, qcount, exact_match = self.decode()
-                    devf1, dev_exact_match = self.decode(self.devbatcher, self.dev_size)
+                    # devf1, dev_exact_match = self.decode(self.devbatcher, self.dev_size)
                     testf1, test_exact_match = self.decode(self.testbatcher, self.test_size)
                 
                     # write valfuzz and val exact match to summary_writer
                     summary = tf.Summary()
+                    '''
                     tag_name = 'data/val_f1'
                     summary.value.add(tag=tag_name, simple_value=devf1)
                     tag_name = 'data/val_exact_match'
-                    summary.value.add(tag=tag_name, simple_value=dev_exact_match)
+                    summary.value.add(tag=tag_name, simple_value=dev_exact_match)                   '''
+
                     tag_name = 'data/test_f1'
                     summary.value.add(tag=tag_name, simple_value=testf1)
                     tag_name = 'data/test_exact_match'
@@ -560,6 +562,7 @@ class Train(object):
                             if f != snapshot_path:
                                 os.remove(f)
 
+                    '''
                     if devf1 > bestdevf1:
                         print("Best dev f1 so far: %f"%(devf1))
                         bestdevtestf1 = testf1
@@ -584,6 +587,7 @@ class Train(object):
                         for f in glob.glob(snapshot_prefix + '*'):
                             if f != snapshot_path:
                                 os.remove(f)
+                        '''
 
                     print("testf1: %f - devf1: %f - bestdevf1: %f - bestdevtestf1: %f - besttestf1 %f "%(testf1,devf1,bestdevf1,bestdevtestf1,besttestf1))
 
