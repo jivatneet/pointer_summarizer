@@ -1,0 +1,2219 @@
+[
+    {
+        "uid": "271",
+        "question": [
+            "how",
+            "much",
+            "carbs",
+            "does",
+            "peanut",
+            "butter",
+            "have",
+            "[sep]",
+            "res:peanut_butter",
+            "[sep]",
+            "dbp:carbs"
+        ],
+        "goldents": [
+            "res:Peanut_butter"
+        ],
+        "goldrels": [
+            "dbp:carbs"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_3": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_6": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 .",
+        "exact_match": "match"
+    },
+    {
+        "uid": "39",
+        "question": [
+            "when",
+            "was",
+            "the",
+            "battle",
+            "of",
+            "gettysburg",
+            "[sep]",
+            "res:battle_of_gettysburg",
+            "[sep]",
+            "dbo:date"
+        ],
+        "goldents": [
+            "res:Battle_of_Gettysburg"
+        ],
+        "goldrels": [
+            "dbo:date"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_8": "select count distinct where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 } }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "75",
+        "question": [
+            "who",
+            "was",
+            "the",
+            "16th",
+            "president",
+            "of",
+            "the",
+            "united",
+            "states",
+            "[sep]",
+            "[sep]",
+            "dbo:office",
+            "dbo:orderinoffice"
+        ],
+        "goldents": [],
+        "goldrels": [
+            "dbo:office",
+            "dbo:orderInOffice"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 predpos@@1  ' president of the united states '  . ?vr0 predpos@@2  ' 16th '  . }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_1": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_2": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc count ?vr1 ) offset 0 limit 1",
+        "answer_3": "select ?vr0 ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_4": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 1 limit 1",
+        "answer_5": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( count ?vr1 ) offset 0 limit 1",
+        "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( count count ?vr1 ) offset 0 limit 1",
+        "answer_7": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ( ) offset 0 limit 1",
+        "answer_8": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 1 limit 1",
+        "answer_9": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "115",
+        "question": [
+            "what",
+            "is",
+            "the",
+            "longest",
+            "river",
+            "[sep]",
+            "[sep]",
+            "dbo:river",
+            "dbo:length",
+            "dbp:length"
+        ],
+        "goldents": [],
+        "goldrels": [
+            "dbo:River",
+            "dbo:length",
+            "dbp:length"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 ?vr1 . } union { ?vr0 predpos@@3 ?vr1 . } } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_0": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . ?vr1 rdf:type predpos@@3 . } order by desc ( count ( ?vr1 ) ) offset 0 limit 1",
+        "answer_1": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . ?vr1 predpos@@3 ?vr0 . } order by desc ( count ( ?vr1 ) ) offset 0 limit 1",
+        "answer_2": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . ?vr1 rdf:type predpos@@3 . } order by desc ( count count ?vr1 ) ) offset 0 limit 1",
+        "answer_3": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr0 . ?vr1 rdf:type predpos@@3 . } order by desc ( count ( ?vr1 ) ) offset 0 limit 1",
+        "answer_4": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr0 . ?vr1 predpos@@3 ?vr0 . } order by desc ( count ( ?vr1 ) ) offset 0 limit 1",
+        "answer_5": "select distinct ?vr0 where { ?vr1 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . ?vr1 rdf:type predpos@@3 . } order by desc ( count ( ?vr1 ) ) offset 0 limit 1",
+        "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . ?vr1 predpos@@3 ?vr0 . } order by desc ( count count ?vr1 ) ) offset 0 limit 1",
+        "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr0 . ?vr1 predpos@@3 ?vr0 . } order by desc ( count ( ?vr1 ) ) offset 0 limit 1",
+        "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 ?vr0 . } order by desc ( count ( ?vr1 ) ) offset 0 limit 1",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . ?vr1 rdf:type predpos@@3 . } order by desc count count ( ?vr1 ) ) offset 0 limit 1",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "295",
+        "question": [
+            "who",
+            "was",
+            "married",
+            "to",
+            "president",
+            "chirac",
+            "[sep]",
+            "res:jacques_chirac",
+            "[sep]",
+            "dbo:spouse"
+        ],
+        "goldents": [
+            "res:Jacques_Chirac"
+        ],
+        "goldrels": [
+            "dbo:spouse"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count distinct where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 } }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "5",
+        "question": [
+            "how",
+            "many",
+            "countries",
+            "are",
+            "there",
+            "in",
+            "europe",
+            "[sep]",
+            "yago:europeancountries",
+            "[sep]"
+        ],
+        "goldents": [
+            "yago:EuropeanCountries"
+        ],
+        "goldrels": [],
+        "target": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type entpos@@1 . }",
+        "answer_0": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type entpos@@1 . }",
+        "answer_1": "select distinct ?vr0 where { ?vr0 rdf:type entpos@@1 . }",
+        "answer_2": "select count ?vr0 where { ?vr0 rdf:type entpos@@1 . }",
+        "answer_3": "select ?vr0 ?vr0 where { ?vr0 rdf:type entpos@@1 . }",
+        "answer_4": "select distinct ?vr0 where { entpos@@1 rdf:type ?vr0 . }",
+        "answer_5": "ask where { ?vr0 rdf:type entpos@@2 . }",
+        "answer_6": "ask where { entpos@@1 rdf:type predpos@@1 . }",
+        "answer_7": "select count ?vr0 where { ?vr0 rdf:type entpos@@1 . } }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type entpos@@1 . } }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type entpos@@1 . } order",
+        "exact_match": "match"
+    },
+    {
+        "uid": "2",
+        "question": [
+            "give",
+            "me",
+            "the",
+            "birthdays",
+            "of",
+            "all",
+            "actors",
+            "of",
+            "the",
+            "television",
+            "show",
+            "charmed.",
+            "[sep]",
+            "res:charmed",
+            "[sep]",
+            "dbo:starring",
+            "dbo:birthdate"
+        ],
+        "goldents": [
+            "res:Charmed"
+        ],
+        "goldrels": [
+            "dbo:starring",
+            "dbo:birthDate"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_1": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_3": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr1 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_5": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr2 . }",
+        "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@2 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_7": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "167",
+        "question": [
+            "who",
+            "are",
+            "the",
+            "parents",
+            "of",
+            "the",
+            "wife",
+            "of",
+            "juan",
+            "carlos",
+            "i",
+            "[sep]",
+            "res:juan_carlos_i_of_spain",
+            "[sep]",
+            "dbo:spouse",
+            "dbo:parent"
+        ],
+        "goldents": [
+            "res:Juan_Carlos_I_of_Spain"
+        ],
+        "goldrels": [
+            "dbo:spouse",
+            "dbo:parent"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_1": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_3": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr1 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_5": "select distinct ?vr0 where { entpos@@1 predpos@@2 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_7": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_8": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 } }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "150",
+        "question": [
+            "was",
+            "the",
+            "cuban",
+            "missile",
+            "crisis",
+            "earlier",
+            "than",
+            "the",
+            "bay",
+            "of",
+            "pigs",
+            "invasion",
+            "[sep]",
+            "res:cuban_missile_crisis",
+            "res:bay_of_pigs_invasion",
+            "[sep]",
+            "dbo:date",
+            "dbo:date"
+        ],
+        "goldents": [
+            "res:Cuban_missile_crisis",
+            "res:Bay_of_Pigs_Invasion"
+        ],
+        "goldrels": [
+            "dbo:date",
+            "dbo:date"
+        ],
+        "target": "ask where { entpos@@1 predpos@@1 ?vr0 . entpos@@2 predpos@@1 ?vr1 . filter ( ?vr0 < ?vr1 ) }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_1": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . ?vr0 predpos@@1 ?vr2 . }",
+        "answer_2": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_3": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_4": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . ?vr0 entpos@@3 ?vr1 . }",
+        "answer_5": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr0 rdf:type entpos@@3 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . ?vr0 rdfs:label ?vr1 = ?vr1 ) ) }",
+        "answer_7": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . ?vr0 rdfs:label ?vr1 = ?vr1 ) )",
+        "answer_8": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . ?vr0 rdfs:label ?vr1 = ?vr1 ) } }",
+        "answer_9": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . ?vr0 rdfs:label ?vr1 = ?vr1 ) }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "69",
+        "question": [
+            "which",
+            "caves",
+            "have",
+            "more",
+            "than",
+            "3",
+            "entrances",
+            "[sep]",
+            "[sep]",
+            "dbo:cave",
+            "dbp:entrancecount"
+        ],
+        "goldents": [],
+        "goldrels": [
+            "dbo:Cave",
+            "dbp:entranceCount"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . filter ( ?vr1 > 3 ) . }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_1": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_2": "select ?vr0 ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_3": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr0 . } order by desc ( count ( ?vr1 ) ) offset 0 limit 1",
+        "answer_4": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc count ?vr1 ) offset 0 limit 1",
+        "answer_5": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( count ?vr1 ) offset 0 limit 1",
+        "answer_6": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ( ) offset 0 limit 1",
+        "answer_7": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 ex ' . }",
+        "answer_8": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 [UNK] ' . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . filter ( ?vr1 < entrances ) }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "49",
+        "question": [
+            "which",
+            "volcanos",
+            "in",
+            "japan",
+            "erupted",
+            "since",
+            "2000",
+            "[sep]",
+            "res:japan",
+            "[sep]",
+            "dbo:volcano",
+            "dbo:locatedinarea",
+            "dbo:eruptionyear"
+        ],
+        "goldents": [
+            "res:Japan"
+        ],
+        "goldrels": [
+            "dbo:Volcano",
+            "dbo:locatedInArea",
+            "dbo:eruptionYear"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( year ( ?vr1 ) >= 2000 ) }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_1": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_2": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) limit 1",
+        "answer_3": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 predpos@@2 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_4": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 rdf:type predpos@@2 . ?vr0 predpos@@1 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_5": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@2 ?vr1 . } }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) limit 1",
+        "answer_7": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr0 rdf:type predpos@@2 . ?vr0 predpos@@1 ?vr2 . }",
+        "answer_8": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr0 rdf:type predpos@@2 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) limit 1 1",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "164",
+        "question": [
+            "give",
+            "me",
+            "all",
+            "launch",
+            "pads",
+            "operated",
+            "by",
+            "nasa.",
+            "[sep]",
+            "res:nasa",
+            "[sep]",
+            "dbo:launchpad",
+            "dbo:operator"
+        ],
+        "goldents": [
+            "res:NASA"
+        ],
+        "goldrels": [
+            "dbo:LaunchPad",
+            "dbo:operator"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . entpos@@1 predpos@@2 ?vr0 . }",
+        "answer_3": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_4": "select ?vr0 ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_5": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . entpos@@1 predpos@@2 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr0 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "102",
+        "question": [
+            "who",
+            "was",
+            "john",
+            "f.",
+            "kennedy's",
+            "vice",
+            "president",
+            "[sep]",
+            "res:john_f._kennedy",
+            "[sep]",
+            "dbo:vicepresident"
+        ],
+        "goldents": [
+            "res:John_F._Kennedy"
+        ],
+        "goldrels": [
+            "dbo:vicePresident"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( distinct ) ) { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ( ( ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ( ( ) ?vr0 entpos@@1 where entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 predpos@@1 }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "297",
+        "question": [
+            "where",
+            "in",
+            "france",
+            "is",
+            "sparkling",
+            "wine",
+            "produced",
+            "[sep]",
+            "res:sparkling_wine",
+            "res:france",
+            "[sep]",
+            "dbo:wineproduced",
+            "dbo:location"
+        ],
+        "goldents": [
+            "res:Sparkling_wine",
+            "res:France"
+        ],
+        "goldrels": [
+            "dbo:wineProduced",
+            "dbo:location"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_1": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@1 entpos@@2 . }",
+        "answer_2": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_3": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_4": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_5": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@2 ?vr0 . ?vr0 predpos@@1 entpos@@2 . }",
+        "answer_7": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@1 ?vr0 . }",
+        "answer_8": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . entpos@@1 predpos@@2 ?vr1 . filter ( ?vr0 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "161",
+        "question": [
+            "how",
+            "many",
+            "missions",
+            "does",
+            "the",
+            "soyuz",
+            "programme",
+            "have",
+            "[sep]",
+            "res:soyuz_programme",
+            "[sep]",
+            "dbp:programme"
+        ],
+        "goldents": [
+            "res:Soyuz_programme"
+        ],
+        "goldrels": [
+            "dbp:programme"
+        ],
+        "target": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_3": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_7": "select distinct ?vr0 where { ?vr1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "6",
+        "question": [
+            "in",
+            "which",
+            "city",
+            "did",
+            "john",
+            "f.",
+            "kennedy",
+            "die",
+            "[sep]",
+            "res:john_f._kennedy",
+            "[sep]",
+            "dbo:deathplace",
+            "dbo:city"
+        ],
+        "goldents": [
+            "res:John_F._Kennedy"
+        ],
+        "goldrels": [
+            "dbo:deathPlace",
+            "dbo:City"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_2": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_3": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . entpos@@1 predpos@@2 ?vr0 . }",
+        "answer_4": "select ?vr0 ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_5": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . entpos@@1 predpos@@2 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr0 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "62",
+        "question": [
+            "who",
+            "created",
+            "wikipedia",
+            "[sep]",
+            "res:wikipedia",
+            "[sep]",
+            "dbo:author"
+        ],
+        "goldents": [
+            "res:Wikipedia"
+        ],
+        "goldrels": [
+            "dbo:author"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select distinct ?vr0 entpos@@1 { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select distinct ?vr0 optional { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "ask where { entpos@@1 rdf:type predpos@@1 . }",
+        "answer_6": "select distinct ?vr0 { { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 entpos@@1 . }",
+        "answer_8": "ask where { entpos@@1 { entpos@@1 predpos@@1 ?vr0 . } }",
+        "answer_9": "select count ( distinct ?vr0 ) where { } }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "45",
+        "question": [
+            "how",
+            "many",
+            "ethnic",
+            "groups",
+            "live",
+            "in",
+            "slovenia",
+            "[sep]",
+            "res:slovenia",
+            "[sep]",
+            "dbo:ethnicgroup"
+        ],
+        "goldents": [
+            "res:Slovenia"
+        ],
+        "goldrels": [
+            "dbo:ethnicGroup"
+        ],
+        "target": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_6": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count ( ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "197",
+        "question": [
+            "who",
+            "painted",
+            "the",
+            "storm",
+            "on",
+            "the",
+            "sea",
+            "of",
+            "galilee",
+            "[sep]",
+            "res:the_storm_on_the_sea_of_galilee",
+            "[sep]",
+            "dbo:author"
+        ],
+        "goldents": [
+            "res:The_Storm_on_the_Sea_of_Galilee"
+        ],
+        "goldrels": [
+            "dbo:author"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select count ( ( ) distinct ) { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ( ( ) where { entpos@@1 ?vr0 predpos@@1 } }",
+        "answer_9": "select count ( ( ) where { entpos@@1 ?vr0 predpos@@1 } .",
+        "exact_match": "match"
+    },
+    {
+        "uid": "148",
+        "question": [
+            "in",
+            "which",
+            "uk",
+            "city",
+            "are",
+            "the",
+            "headquarters",
+            "of",
+            "the",
+            "mi6",
+            "[sep]",
+            "res:secret_intelligence_service",
+            "res:united_kingdom",
+            "[sep]",
+            "dbo:headquarter",
+            "dbo:country"
+        ],
+        "goldents": [
+            "res:Secret_Intelligence_Service",
+            "res:United_Kingdom"
+        ],
+        "goldrels": [
+            "dbo:headquarter",
+            "dbo:country"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_1": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@1 entpos@@2 . }",
+        "answer_2": "ask where { entpos@@1 predpos@@1 ?vr0 . entpos@@1 predpos@@1 ?vr1 . filter ( ?vr0 > ?vr1 ) }",
+        "answer_3": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_4": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_5": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_6": "ask where { entpos@@1 predpos@@1 ?vr0 . entpos@@1 predpos@@1 ?vr1 . filter ( ?vr0 = ?vr1 ) }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . entpos@@2 predpos@@1 ?vr1 . filter ( ?vr0 > ?vr1 ) }",
+        "answer_8": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 entpos@@2 . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . entpos@@2 predpos@@1 ?vr1 . filter ( ?vr0 = ?vr1 ) }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "142",
+        "question": [
+            "who",
+            "is",
+            "the",
+            "husband",
+            "of",
+            "amanda",
+            "palmer",
+            "[sep]",
+            "res:amanda_palmer",
+            "[sep]",
+            "dbp:spouse"
+        ],
+        "goldents": [
+            "res:Amanda_Palmer"
+        ],
+        "goldrels": [
+            "dbp:spouse"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( ( ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 entpos@@1 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "57",
+        "question": [
+            "list",
+            "all",
+            "episodes",
+            "of",
+            "the",
+            "first",
+            "season",
+            "of",
+            "the",
+            "hbo",
+            "television",
+            "series",
+            "the",
+            "sopranos.",
+            "[sep]",
+            "res:the_sopranos",
+            "[sep]",
+            "dbo:series",
+            "dbo:seasonnumber"
+        ],
+        "goldents": [
+            "res:The_Sopranos"
+        ],
+        "goldrels": [
+            "dbo:series",
+            "dbo:seasonNumber"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 1 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_1": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_3": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr1 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_5": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr2 . }",
+        "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@2 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_7": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "18",
+        "question": [
+            "which",
+            "museum",
+            "exhibits",
+            "the",
+            "scream",
+            "by",
+            "munch",
+            "[sep]",
+            "res:the_scream",
+            "[sep]",
+            "dbo:museum"
+        ],
+        "goldents": [
+            "res:The_Scream"
+        ],
+        "goldrels": [
+            "dbo:museum"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ( ( ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select count ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_8": "select count ( ( ) distinct ) { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "11",
+        "question": [
+            "which",
+            "countries",
+            "have",
+            "more",
+            "than",
+            "ten",
+            "caves",
+            "[sep]",
+            "[sep]",
+            "dbo:country",
+            "dbo:cave",
+            "dbo:location",
+            "dbo:location",
+            "dbo:country"
+        ],
+        "goldents": [],
+        "goldrels": [
+            "dbo:Country",
+            "dbo:Cave",
+            "dbo:location",
+            "dbo:location",
+            "dbo:country"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 rdf:type predpos@@2 . { ?vr1 predpos@@3 ?vr0 . } union { ?vr1 predpos@@3 ?vr2 . ?vr2 predpos@@5 ?vr0 . } } group by ?vr0 having ( count ( ?vr1 ) > 10 )",
+        "answer_0": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type predpos@@5 . }",
+        "answer_1": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type predpos@@4 . }",
+        "answer_2": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@1 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type predpos@@5 . }",
+        "answer_3": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@1 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type predpos@@5 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr0 . ?vr1 rdf:type predpos@@3 . ?vr1 predpos@@4 entpos@@1 . }",
+        "answer_5": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@1 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type predpos@@4 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@4 ?vr0 . }",
+        "answer_7": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@3 ?vr0 . ?vr0 rdf:type predpos@@5 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type predpos@@5 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type entpos@@1 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "201",
+        "question": [
+            "give",
+            "me",
+            "all",
+            "taikonauts.",
+            "[sep]",
+            "res:china",
+            "[sep]",
+            "dbo:astronaut",
+            "dbo:nationality"
+        ],
+        "goldents": [
+            "res:China"
+        ],
+        "goldrels": [
+            "dbo:Astronaut",
+            "dbo:nationality"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_1": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 \" . }",
+        "answer_2": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_3": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_5": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 \" taikonauts. \" . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 \" [sep] \" . }",
+        "answer_7": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 \" . } }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 \" res:china \" . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "31",
+        "question": [
+            "what",
+            "is",
+            "the",
+            "net",
+            "income",
+            "of",
+            "apple",
+            "[sep]",
+            "res:apple_inc.",
+            "[sep]",
+            "dbo:netincome"
+        ],
+        "goldents": [
+            "res:Apple_Inc."
+        ],
+        "goldrels": [
+            "dbo:netIncome"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( ( ) distinct entpos@@1 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ( ( ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select count ( distinct ) ) { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 predpos@@1 }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "28",
+        "question": [
+            "give",
+            "me",
+            "all",
+            "communist",
+            "countries.",
+            "[sep]",
+            "res:communism",
+            "res:communist_state",
+            "[sep]",
+            "dbo:country",
+            "dbo:governmenttype",
+            "dbo:governmenttype"
+        ],
+        "goldents": [
+            "res:Communism",
+            "res:Communist_state"
+        ],
+        "goldrels": [
+            "dbo:Country",
+            "dbo:governmentType",
+            "dbo:governmentType"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@2 entpos@@2 . } }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 entpos@@2 . }",
+        "answer_1": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 entpos@@2 . }",
+        "answer_2": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@2 entpos@@1 . } }",
+        "answer_3": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . { ?vr0 predpos@@2 entpos@@2 . } union { ?vr0 predpos@@3 ?vr1 . } }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . { ?vr0 predpos@@2 entpos@@2 . } union { ?vr0 predpos@@2 ?vr1 . } }",
+        "answer_5": "select ?vr0 ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 entpos@@2 . }",
+        "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . ?vr0 predpos@@1 entpos@@2 . }",
+        "answer_7": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr0 rdf:type predpos@@2 . ?vr0 predpos@@1 entpos@@2 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 entpos@@1 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "63",
+        "question": [
+            "give",
+            "me",
+            "all",
+            "actors",
+            "starring",
+            "in",
+            "last",
+            "action",
+            "hero.",
+            "[sep]",
+            "res:last_action_hero",
+            "[sep]",
+            "dbo:starring"
+        ],
+        "goldents": [
+            "res:Last_Action_Hero"
+        ],
+        "goldrels": [
+            "dbo:starring"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( distinct ) ) { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( ( ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select distinct ?vr0 where { ?vr1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ( ( ) where { entpos@@1 ?vr0 predpos@@1 } }",
+        "answer_9": "select count ( ( ) where { entpos@@1 ?vr0 predpos@@1 } .",
+        "exact_match": "match"
+    },
+    {
+        "uid": "43",
+        "question": [
+            "who",
+            "is",
+            "the",
+            "mayor",
+            "of",
+            "tel",
+            "aviv",
+            "[sep]",
+            "res:tel_aviv",
+            "[sep]",
+            "dbo:leadername"
+        ],
+        "goldents": [
+            "res:Tel_Aviv"
+        ],
+        "goldrels": [
+            "dbo:leaderName"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( ( ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 predpos@@1 }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "268",
+        "question": [
+            "how",
+            "much",
+            "did",
+            "pulp",
+            "fiction",
+            "cost",
+            "[sep]",
+            "res:pulp_fiction",
+            "[sep]",
+            "dbo:budget"
+        ],
+        "goldents": [
+            "res:Pulp_Fiction"
+        ],
+        "goldrels": [
+            "dbo:budget"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count distinct where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 } }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "125",
+        "question": [
+            "which",
+            "u.s.",
+            "state",
+            "has",
+            "been",
+            "admitted",
+            "latest",
+            "[sep]",
+            "yago:statesoftheunitedstates",
+            "[sep]",
+            "dbp:admittancedate"
+        ],
+        "goldents": [
+            "yago:StatesOfTheUnitedStates"
+        ],
+        "goldrels": [
+            "dbp:admittancedate"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type entpos@@1 . ?vr0 predpos@@1 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_0": "select distinct ?vr0 where { ?vr1 predpos@@1 ?vr0 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_2": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_3": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select distinct ?vr0 where { ?vr1 rdf:type entpos@@1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_7": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr1 predpos@@1 ?vr0 . ?vr1 predpos@@1 ?vr0 . } order by",
+        "answer_9": "select distinct ?vr0 where { ?vr1 predpos@@1 ?vr0 . ?vr1 rdfs:label ' latest latest . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "192",
+        "question": [
+            "show",
+            "me",
+            "all",
+            "songs",
+            "from",
+            "bruce",
+            "springsteen",
+            "released",
+            "between",
+            "1980",
+            "and",
+            "1990.",
+            "[sep]",
+            "res:bruce_springsteen",
+            "[sep]",
+            "dbo:song",
+            "dbo:artist",
+            "dbo:releasedate"
+        ],
+        "goldents": [
+            "res:Bruce_Springsteen"
+        ],
+        "goldrels": [
+            "dbo:Song",
+            "dbo:artist",
+            "dbo:releaseDate"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 >=  ' 1980-01-01 ' ^^xsd:date && ?vr1 <=  ' 1990-12-31 ' ^^xsd:date ) }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_1": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 [UNK] ( [UNK] ' [UNK] ' ) ) }",
+        "answer_2": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 >= [UNK] ) . }",
+        "answer_3": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 ( [UNK] ' [UNK] ' ) ) }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 ( [UNK] ) . }",
+        "answer_5": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 [UNK] [UNK] ( ' ' [UNK] ' ) ) }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 >= [UNK] ' [UNK] ' [UNK] ' ) ) }",
+        "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 [UNK] [UNK] ( ' [UNK] ' ) ) }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 [UNK] [UNK] ( ' [UNK] ' [UNK] ) . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 [UNK] [UNK] ( [UNK] ' [UNK] ' ) ) }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "31",
+        "question": [
+            "what",
+            "is",
+            "the",
+            "currency",
+            "of",
+            "the",
+            "czech",
+            "republic",
+            "[sep]",
+            "res:czech_republic",
+            "[sep]",
+            "dbo:currency"
+        ],
+        "goldents": [
+            "res:Czech_Republic"
+        ],
+        "goldrels": [
+            "dbo:currency"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_4": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count ( ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "252",
+        "question": [
+            "give",
+            "all",
+            "swimmers",
+            "that",
+            "were",
+            "born",
+            "in",
+            "moscow.",
+            "[sep]",
+            "res:moscow",
+            "[sep]",
+            "dbo:swimmer",
+            "dbo:birthplace"
+        ],
+        "goldents": [
+            "res:Moscow"
+        ],
+        "goldrels": [
+            "dbo:Swimmer",
+            "dbo:birthPlace"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . entpos@@1 predpos@@2 ?vr0 . }",
+        "answer_3": "select ?vr0 ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_5": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr0 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "120",
+        "question": [
+            "how",
+            "tall",
+            "is",
+            "michael",
+            "jordan",
+            "[sep]",
+            "res:michael_jordan",
+            "[sep]",
+            "dbo:height"
+        ],
+        "goldents": [
+            "res:Michael_Jordan"
+        ],
+        "goldrels": [
+            "dbo:height"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_3": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count count distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_6": "select count ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_7": "ask where { entpos@@1 rdf:type predpos@@1 . }",
+        "answer_8": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 .",
+        "answer_9": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 } }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "179",
+        "question": [
+            "was",
+            "marc",
+            "chagall",
+            "a",
+            "jew",
+            "[sep]",
+            "res:marc_chagall",
+            "[sep]",
+            "dbp:ethnicity"
+        ],
+        "goldents": [
+            "res:Marc_Chagall"
+        ],
+        "goldrels": [
+            "dbp:ethnicity"
+        ],
+        "target": "ask where { entpos@@1 predpos@@1  ' jewish ' @en . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_3": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count count distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_5": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select count ( ( ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_7": "select count ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_8": "ask where { entpos@@1 rdf:type predpos@@1 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 .",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "7",
+        "question": [
+            "was",
+            "the",
+            "wife",
+            "of",
+            "president",
+            "lincoln",
+            "called",
+            "mary",
+            "[sep]",
+            "res:abraham_lincoln",
+            "[sep]",
+            "dbo:spouse"
+        ],
+        "goldents": [
+            "res:Abraham_Lincoln"
+        ],
+        "goldrels": [
+            "dbo:spouse"
+        ],
+        "target": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdfs:label ?vr1 . filter ( regex ( ?vr1, ' mary '  ) ) }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( distinct ) ) { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select count ( ( ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count ( ( ) distinct ) { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( ( ) distinct entpos@@1 where entpos@@1 predpos@@1 ?vr0 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "185",
+        "question": [
+            "how",
+            "many",
+            "people",
+            "live",
+            "in",
+            "the",
+            "capital",
+            "of",
+            "australia",
+            "[sep]",
+            "res:australia",
+            "[sep]",
+            "dbo:capital",
+            "dbo:populationtotal"
+        ],
+        "goldents": [
+            "res:Australia"
+        ],
+        "goldrels": [
+            "dbo:capital",
+            "dbo:populationTotal"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_1": "select distinct ?vr0 where { ?vr1 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_3": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr1 . }",
+        "answer_4": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_5": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_6": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_7": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_8": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_9": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "165",
+        "question": [
+            "which",
+            "instruments",
+            "does",
+            "cat",
+            "stevens",
+            "play",
+            "[sep]",
+            "res:cat_stevens",
+            "[sep]",
+            "dbo:instrument"
+        ],
+        "goldents": [
+            "res:Cat_Stevens"
+        ],
+        "goldrels": [
+            "dbo:instrument"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_8": "select count distinct where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 } }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "180",
+        "question": [
+            "give",
+            "me",
+            "all",
+            "books",
+            "by",
+            "william",
+            "goldman",
+            "with",
+            "more",
+            "than",
+            "300",
+            "pages.",
+            "[sep]",
+            "res:william_goldman",
+            "[sep]",
+            "dbo:book",
+            "dbo:author",
+            "dbo:numberofpages"
+        ],
+        "goldents": [
+            "res:William_Goldman"
+        ],
+        "goldrels": [
+            "dbo:Book",
+            "dbo:author",
+            "dbo:numberOfPages"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 > 300 ) }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 >= [UNK] ) . }",
+        "answer_1": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 > pages. ) . }",
+        "answer_2": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 > [UNK] ) . }",
+        "answer_3": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 > 300.0 ) . }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 ( [UNK] ) . }",
+        "answer_5": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 > pages. ' [UNK] ' ) ) }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 [UNK] [UNK] ( ' [UNK] ) . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 [UNK] ( [UNK] ' [UNK] ) . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 >= [UNK] ' [UNK] ' ) ) }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "269",
+        "question": [
+            "how",
+            "many",
+            "airlines",
+            "are",
+            "there",
+            "[sep]",
+            "[sep]",
+            "dbo:airline"
+        ],
+        "goldents": [],
+        "goldrels": [
+            "dbo:Airline"
+        ],
+        "target": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . }",
+        "answer_0": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . }",
+        "answer_1": "select count ( count ?vr0 ) where { ?vr0 rdf:type predpos@@1 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { ?vr0 rdf:type predpos@@1 . }",
+        "answer_3": "select count count distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . }",
+        "answer_4": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . } order by desc ( ( ?vr1 ) offset 0 limit 1",
+        "answer_5": "select distinct ?vr0 where { ?vr0 predpos@@1 ' are there there ' @en . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 ' there there there ' @en . }",
+        "answer_7": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 ?vr0 predpos@@1 ' @en ' @en . }",
+        "answer_8": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 ?vr0 predpos@@1 ' [UNK] ' . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 ?vr0 predpos@@1 ' . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "43",
+        "question": [
+            "how",
+            "high",
+            "is",
+            "the",
+            "yokohama",
+            "marine",
+            "tower",
+            "[sep]",
+            "res:yokohama_marine_tower",
+            "[sep]",
+            "dbo:height"
+        ],
+        "goldents": [
+            "res:Yokohama_Marine_Tower"
+        ],
+        "goldrels": [
+            "dbo:height"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select count ( ( ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_9": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "107",
+        "question": [
+            "when",
+            "was",
+            "alberta",
+            "admitted",
+            "as",
+            "province",
+            "[sep]",
+            "res:alberta",
+            "[sep]",
+            "dbp:admittancedate"
+        ],
+        "goldents": [
+            "res:Alberta"
+        ],
+        "goldrels": [
+            "dbp:admittancedate"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count distinct where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 } }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "73",
+        "question": [
+            "how",
+            "many",
+            "aldi",
+            "stores",
+            "are",
+            "there",
+            "[sep]",
+            "res:aldi",
+            "[sep]",
+            "dbo:numberoflocations"
+        ],
+        "goldents": [
+            "res:Aldi"
+        ],
+        "goldrels": [
+            "dbo:numberOfLocations"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count distinct where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 } }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "87",
+        "question": [
+            "who",
+            "wrote",
+            "the",
+            "book",
+            "the",
+            "pillars",
+            "of",
+            "the",
+            "earth",
+            "[sep]",
+            "res:the_pillars_of_the_earth",
+            "[sep]",
+            "dbo:author"
+        ],
+        "goldents": [
+            "res:The_Pillars_of_the_Earth"
+        ],
+        "goldrels": [
+            "dbo:author"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "3",
+        "question": [
+            "who",
+            "is",
+            "the",
+            "youngest",
+            "pulitzer",
+            "prize",
+            "winner",
+            "[sep]",
+            "res:pulitzer_prize",
+            "[sep]",
+            "dbo:award",
+            "dbo:birthdate"
+        ],
+        "goldents": [
+            "res:Pulitzer_Prize"
+        ],
+        "goldrels": [
+            "dbo:award",
+            "dbo:birthDate"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_1": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . } order by asc ( ?vr0 ) offset 0 limit 1",
+        "answer_2": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . } order by asc ( ?vr1 ) offset 0 limit 1",
+        "answer_3": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr0 ) offset 0 limit 1",
+        "answer_4": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 \" winner \" @en . }",
+        "answer_5": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 \" winner ' @en . }",
+        "answer_6": "select distinct ?vr0 where { ?vr1 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_7": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 winner . }",
+        "answer_9": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "64",
+        "question": [
+            "which",
+            "software",
+            "has",
+            "been",
+            "developed",
+            "by",
+            "organizations",
+            "founded",
+            "in",
+            "california",
+            "[sep]",
+            "res:california",
+            "[sep]",
+            "dbo:software",
+            "dbo:company",
+            "dbo:developer",
+            "dbo:foundationplace"
+        ],
+        "goldents": [
+            "res:California"
+        ],
+        "goldrels": [
+            "dbo:Software",
+            "dbo:Company",
+            "dbo:developer",
+            "dbo:foundationPlace"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 rdf:type predpos@@2 . ?vr0 predpos@@3 ?vr1 . ?vr1 predpos@@4 entpos@@1 . }",
+        "answer_0": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type predpos@@5 . }",
+        "answer_1": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@4 ?vr0 . }",
+        "answer_2": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr0 . ?vr1 rdf:type predpos@@3 . ?vr1 rdf:type entpos@@1 . }",
+        "answer_3": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 rdf:type ?vr0 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type entpos@@1 . }",
+        "answer_5": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type predpos@@5 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@1 . ?vr1 predpos@@4 ?vr0 . ?vr0 rdf:type predpos@@5 . }",
+        "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr0 . ?vr1 rdf:type predpos@@3 . ?vr1 predpos@@4 entpos@@1 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . ?vr1 rdf:type entpos@@1 . ?vr1 predpos@@4 entpos@@1 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr1 predpos@@2 entpos@@1 . ?vr1 predpos@@3 entpos@@2 . ?vr1 predpos@@4 ?vr0 . ?vr0 predpos@@4 entpos@@1 .",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "4",
+        "question": [
+            "which",
+            "river",
+            "does",
+            "the",
+            "brooklyn",
+            "bridge",
+            "cross",
+            "[sep]",
+            "res:brooklyn_bridge",
+            "[sep]",
+            "dbo:crosses"
+        ],
+        "goldents": [
+            "res:Brooklyn_Bridge"
+        ],
+        "goldrels": [
+            "dbo:crosses"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_6": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count ( ( ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "276",
+        "question": [
+            "what",
+            "is",
+            "the",
+            "location",
+            "of",
+            "the",
+            "houses",
+            "of",
+            "parliament",
+            "[sep]",
+            "res:palace_of_westminster",
+            "[sep]",
+            "dbo:location"
+        ],
+        "goldents": [
+            "res:Palace_of_Westminster"
+        ],
+        "goldrels": [
+            "dbo:location"
+        ],
+        "target": "select ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select ( ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( ( ) distinct ) { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 entpos@@1 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "37",
+        "question": [
+            "when",
+            "did",
+            "latvia",
+            "join",
+            "the",
+            "eu",
+            "[sep]",
+            "res:latvia",
+            "[sep]",
+            "dbp:accessioneudate"
+        ],
+        "goldents": [
+            "res:Latvia"
+        ],
+        "goldrels": [
+            "dbp:accessioneudate"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count distinct where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 } }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "231",
+        "question": [
+            "how",
+            "many",
+            "inhabitants",
+            "does",
+            "the",
+            "largest",
+            "city",
+            "in",
+            "canada",
+            "have",
+            "[sep]",
+            "res:canada",
+            "[sep]",
+            "dbo:largestcity",
+            "dbo:populationtotal"
+        ],
+        "goldents": [
+            "res:Canada"
+        ],
+        "goldrels": [
+            "dbo:largestCity",
+            "dbo:populationTotal"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_1": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_3": "select distinct ?vr0 where { ?vr1 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_4": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_6": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr2 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_8": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "198",
+        "question": [
+            "which",
+            "country",
+            "does",
+            "the",
+            "creator",
+            "of",
+            "miffy",
+            "come",
+            "from",
+            "[sep]",
+            "res:miffy",
+            "[sep]",
+            "dbo:creator",
+            "dbo:nationality"
+        ],
+        "goldents": [
+            "res:Miffy"
+        ],
+        "goldrels": [
+            "dbo:creator",
+            "dbo:nationality"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_2": "select distinct ?vr0 where { ?vr1 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_3": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_4": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr2 . }",
+        "answer_6": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_8": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "42",
+        "question": [
+            "what",
+            "is",
+            "the",
+            "official",
+            "language",
+            "of",
+            "suriname",
+            "[sep]",
+            "res:suriname",
+            "[sep]",
+            "dbo:officiallanguage"
+        ],
+        "goldents": [
+            "res:Suriname"
+        ],
+        "goldrels": [
+            "dbo:officialLanguage"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( count ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_6": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "select count ( ( ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_8": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "239",
+        "question": [
+            "which",
+            "actor",
+            "played",
+            "chewbacca",
+            "[sep]",
+            "res:chewbacca",
+            "[sep]",
+            "dbp:portrayer"
+        ],
+        "goldents": [
+            "res:Chewbacca"
+        ],
+        "goldrels": [
+            "dbp:portrayer"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "ask where { entpos@@1 rdf:type predpos@@1 . }",
+        "answer_4": "select distinct ?vr0 entpos@@1 { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_5": "select distinct ?vr0 optional { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 entpos@@1 . }",
+        "answer_8": "ask where { entpos@@1 { entpos@@1 predpos@@1 ?vr0 . } }",
+        "answer_9": "select count ( distinct ?vr0 ) where { entpos@@1 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "86",
+        "question": [
+            "give",
+            "me",
+            "all",
+            "female",
+            "given",
+            "names.",
+            "[sep]",
+            "res:female",
+            "[sep]",
+            "dbo:givenname",
+            "dbo:gender"
+        ],
+        "goldents": [
+            "res:Female"
+        ],
+        "goldrels": [
+            "dbo:GivenName",
+            "dbo:gender"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_1": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_3": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . entpos@@1 predpos@@2 ?vr0 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_5": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_6": "select ?vr0 ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_7": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_8": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 rdf:type predpos@@2 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 \" . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "113",
+        "question": [
+            "who",
+            "is",
+            "the",
+            "youngest",
+            "player",
+            "in",
+            "the",
+            "premier",
+            "league",
+            "[sep]",
+            "res:premier_league",
+            "[sep]",
+            "dbo:team",
+            "dbo:league",
+            "dbo:birthdate"
+        ],
+        "goldents": [
+            "res:Premier_League"
+        ],
+        "goldrels": [
+            "dbo:team",
+            "dbo:league",
+            "dbo:birthDate"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 predpos@@1 ?vr1 . ?vr1 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr2 . } order by desc ( ?vr2 ) offset 0 limit 1",
+        "answer_0": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 rdf:type predpos@@2 . ?vr0 predpos@@1 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_1": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_2": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( ?vr1 ) limit 1",
+        "answer_3": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 ( ?vr1 ' [UNK] ) . }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 ( ?vr1 ) . }",
+        "answer_5": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 rdf:type predpos@@2 . ?vr0 predpos@@1 ?vr1 . } order by desc ( ?vr1 ) limit 1",
+        "answer_6": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . ?vr1 predpos@@3 entpos@@1 . }",
+        "answer_7": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 > league ) . }",
+        "answer_8": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . filter ( ?vr1 ( [UNK] ) . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 rdf:type predpos@@2 . ?vr0 predpos@@1 ?vr1 . filter ( ?vr1 < ?vr1 ) . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "21",
+        "question": [
+            "which",
+            "states",
+            "border",
+            "illinois",
+            "[sep]",
+            "res:illinois",
+            "[sep]",
+            "dbp:borderingstates"
+        ],
+        "goldents": [
+            "res:Illinois"
+        ],
+        "goldrels": [
+            "dbp:borderingstates"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "ask where { entpos@@1 rdf:type predpos@@1 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 } }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 entpos@@1 . }",
+        "answer_8": "select count count distinct ?vr0 ) where { entpos@@1 predpos@@1 } }",
+        "answer_9": "ask where { entpos@@1 { entpos@@1 predpos@@1 ?vr0 . } }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "232",
+        "question": [
+            "in",
+            "which",
+            "countries",
+            "can",
+            "you",
+            "pay",
+            "using",
+            "the",
+            "west",
+            "african",
+            "cfa",
+            "franc",
+            "[sep]",
+            "res:west_african_cfa_franc",
+            "[sep]",
+            "dbo:currency"
+        ],
+        "goldents": [
+            "res:West_African_CFA_franc"
+        ],
+        "goldrels": [
+            "dbo:currency"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_1": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_3": "select count ( ( distinct ) where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr1 predpos@@1 ?vr0 . }",
+        "answer_5": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr1 predpos@@1 entpos@@1 . }",
+        "answer_7": "select count ( distinct ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . }",
+        "answer_8": "ask where { entpos@@1 predpos@@1 ?vr0 . }",
+        "answer_9": "select distinct where { entpos@@1 predpos@@1 ?vr0 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "284",
+        "question": [
+            "how",
+            "many",
+            "politicians",
+            "graduated",
+            "from",
+            "columbia",
+            "university",
+            "[sep]",
+            "res:politician",
+            "res:columbia_university",
+            "[sep]",
+            "dbo:profession",
+            "dbo:almamater"
+        ],
+        "goldents": [
+            "res:Politician",
+            "res:Columbia_University"
+        ],
+        "goldrels": [
+            "dbo:profession",
+            "dbo:almaMater"
+        ],
+        "target": "select distinct count ( ?vr0 ) where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_1": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@1 entpos@@2 . }",
+        "answer_2": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_3": "ask where { entpos@@1 predpos@@1 ?vr0 . entpos@@1 predpos@@2 ?vr1 . filter ( ?vr0 = ?vr1 ) }",
+        "answer_4": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 entpos@@2 . }",
+        "answer_5": "ask where { entpos@@1 predpos@@1 ?vr0 . entpos@@1 predpos@@2 ?vr1 . filter ( ?vr0 > ?vr1 ) }",
+        "answer_6": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_7": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_8": "select distinct ?vr0 where { entpos@@1 predpos@@2 ?vr0 . ?vr0 predpos@@1 entpos@@2 . }",
+        "answer_9": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 entpos@@2 . }",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "11",
+        "question": [
+            "who",
+            "killed",
+            "john",
+            "lennon",
+            "[sep]",
+            "res:death_of_john_lennon.",
+            "[sep]",
+            "dbo:person.",
+            "dbp:conviction"
+        ],
+        "goldents": [
+            "res:Death_of_John_Lennon."
+        ],
+        "goldrels": [
+            "dbo:Person.",
+            "dbp:conviction"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 ?vr0 predpos@@2 entpos@@1 }",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_1": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@3 entpos@@2 . }",
+        "answer_2": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@3 ' [UNK] ' @en . } }",
+        "answer_3": "select ?vr0 ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_4": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@3 entpos@@1 . } }",
+        "answer_5": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . { ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@3 ' [UNK] ' @en . } }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . } union { ?vr0 predpos@@3 entpos@@1 . }",
+        "answer_7": "select count ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . }",
+        "answer_8": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 } } union { ?vr0 predpos@@3 entpos@@2 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 entpos@@1 . ?vr0 predpos@@3 ?vr1 . } order by desc ( entpos@@1 ) limit 1",
+        "exact_match": "no match"
+    },
+    {
+        "uid": "274",
+        "question": [
+            "who",
+            "is",
+            "the",
+            "mayor",
+            "of",
+            "the",
+            "capital",
+            "of",
+            "french",
+            "polynesia",
+            "[sep]",
+            "res:french_polynesia",
+            "[sep]",
+            "dbo:capital",
+            "dbo:mayor"
+        ],
+        "goldents": [
+            "res:French_Polynesia"
+        ],
+        "goldrels": [
+            "dbo:capital",
+            "dbo:mayor"
+        ],
+        "target": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_0": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_1": "select distinct ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_2": "select count ( distinct ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_3": "select distinct ?vr0 where { ?vr1 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_4": "select count ( ( ?vr0 ) where { entpos@@1 predpos@@1 ?vr1 . ?vr0 predpos@@1 ?vr1 . }",
+        "answer_5": "select distinct ?vr0 where { entpos@@1 predpos@@2 ?vr1 . ?vr1 predpos@@1 ?vr0 . }",
+        "answer_6": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_7": "select ?vr0 ?vr0 where { entpos@@1 predpos@@1 ?vr1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_8": "ask where { entpos@@1 predpos@@1 ?vr0 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 predpos@@1 entpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
+        "exact_match": "match"
+    },
+    {
+        "uid": "111",
+        "question": [
+            "who",
+            "is",
+            "the",
+            "formula",
+            "1",
+            "race",
+            "driver",
+            "with",
+            "the",
+            "most",
+            "races",
+            "[sep]",
+            "[sep]",
+            "dbo:formulaoneracer",
+            "dbo:races"
+        ],
+        "goldents": [],
+        "goldrels": [
+            "dbo:FormulaOneRacer",
+            "dbo:races"
+        ],
+        "target": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_0": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_1": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 1 limit 1",
+        "answer_2": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by asc ( ?vr1 ) offset 0 limit 1",
+        "answer_3": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc count ?vr1 ) offset 0 limit 1",
+        "answer_4": "select ?vr0 ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by desc ( ?vr1 ) offset 0 limit 1",
+        "answer_5": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . } order by asc ( ?vr1 ) offset 1 limit 1",
+        "answer_6": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . filter ( ?vr1 < races ) }",
+        "answer_7": "select count ( distinct ?vr0 ) where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
+        "answer_8": "select distinct ?vr0 where { ?vr1 rdf:type predpos@@1 . ?vr1 predpos@@2 ?vr0 . }",
+        "answer_9": "select distinct ?vr0 where { ?vr0 rdf:type predpos@@1 . ?vr0 predpos@@2 ?vr1 . }",
+        "exact_match": "match"
+    }
+]
