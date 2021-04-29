@@ -3,6 +3,8 @@ import sys,os,json,rdflib,re,copy,requests
 
 
 def calcf1(target,answer):
+    if not target:
+        return 0.0
     if target == answer:
         return 1.0
     try:
@@ -45,7 +47,8 @@ def calcf1(target,answer):
 def hitkg(query):
     try:
         url = 'http://ltcpu1:8892/sparql/'
-        print(query)
+        #print(query)
+        query = 'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>  PREFIX dbo: <http://dbpedia.org/ontology/>  PREFIX res: <http://dbpedia.org/resource/> PREFIX dbp: <http://dbpedia.org/property/> ' + query
         r = requests.get(url, params={'format': 'json', 'query': query})
         json_format = r.json()
         #print(entid,json_format)
@@ -68,6 +71,8 @@ for item in d:
 
 d = json.loads(open(sys.argv[2]).read()) #eg: model_folder_test31.1out.json
 
+querywrong = []
+
 em = 0
 nem = 0
 qem = 0
@@ -75,7 +80,7 @@ qnem = 0
 totf1 = 0.0
 for idx,item in enumerate(d):
     #print(item)
-    #print(str(item['uid']))
+    print(str(item['uid']))
     print(item['question'])
     target = item['target'].split('[sep]')[0]
     answer = item['answer_0'].split('[sep]')[0]
@@ -91,6 +96,10 @@ for idx,item in enumerate(d):
     else:
         qnem += 1
         print("querynotmatch")
+
+    targ_ = target
+    ans_ = answer
+
     for idx1,ent in enumerate(ents):
         if ent:
             target = target.replace('entpos@@'+str(idx1+1),ent)
@@ -114,6 +123,8 @@ for idx,item in enumerate(d):
     else:
         print("nomatch")
         nem += 1
+        querywrong.append({'querytempans':ans_, 'querytemptar': targ_, 'queryans':answer,'querytar':target,'id':str(item['uid']), 'question':item['question'],'ents':ents,'rels':rels,'resulttarget':resulttarget,'resultanswer':resultanswer})
+
     print("target_filled: ",target)
     print("answer_filled: ",answer)
     #print("original_quer: ",goldq[str(item['uid'])])
@@ -123,3 +134,7 @@ for idx,item in enumerate(d):
     print("exactmatch: ",em, "  notmatch: ",nem," total: ",idx)
     print("querymatch: ",qem," querynotmatch: ",qnem)
     print("avg f1: ",avgf1)
+
+f = open(sys.argv[3],'w')
+f.write(json.dumps(querywrong,indent=4,sort_keys=True))
+f.close()

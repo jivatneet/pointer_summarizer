@@ -4,6 +4,7 @@ from __future__ import unicode_literals, print_function, division
 import importlib
 
 import sys
+import json
 
 importlib.reload(sys)
 #in py3 is hard-wired to "utf-8"
@@ -25,6 +26,7 @@ from train_util import get_input_from_batch
 
 
 use_cuda = config.use_gpu and torch.cuda.is_available()
+out = []
 
 class Beam(object):
   def __init__(self, tokens, log_probs, state, state1, context, coverage):
@@ -81,33 +83,49 @@ class BeamSearch(object):
         totalfuzz = 0.0
 
         while batch is not None:
+            res = {}
             # Run beam search to get best Hypothesis
-            best_summary = self.beam_search(batch)
+            best_summaries = self.beam_search(batch)
+            question = batch.questions[0]
+            uid = batch.uid[0]
+            ents = batch.ents[0]
+            rels = batch.rels[0]
+            res['uid'] = uid
+            res['question'] = question
+            res['goldents'] = ents
+            res['goldrels'] = rels
 
-            # Extract the output ids from the hypothesis and convert back to words
-            output_ids = [int(t) for t in best_summary.tokens[1:]]
-            decoded_words = data.outputids2words(output_ids, self.vocab,
+            for idx, best_summary in enumerate(best_summaries):
+                
+                # Extract the output ids from the hypothesis and convert back to words
+                output_ids = [int(t) for t in best_summary.tokens[1:]]
+                decoded_words = data.outputids2words(output_ids, self.vocab,
                                                  (batch.art_oovs[0] if config.pointer_gen else None))
+                
+                # Remove the [STOP] token from decoded_words, if necessary
+                try:
+                    fst_stop_idx = decoded_words.index(data.STOP_DECODING)
+                    decoded_words = decoded_words[:fst_stop_idx]
+                except ValueError:
+                    decoded_words = decoded_words
 
-            # Remove the [STOP] token from decoded_words, if necessary
-            try:
-                fst_stop_idx = decoded_words.index(data.STOP_DECODING)
-                decoded_words = decoded_words[:fst_stop_idx]
-            except ValueError:
-                decoded_words = decoded_words
+                original_abstract_sents = batch.original_abstracts_sents[0]
 
-            original_abstract_sents = batch.original_abstracts_sents[0]
+                # target, answer = write_for_rouge(original_abstract_sents, decoded_words, counter,
+                #                  self._rouge_ref_dir, self._rouge_dec_dir)
 
-            # target, answer = write_for_rouge(original_abstract_sents, decoded_words, counter,
-            #                  self._rouge_ref_dir, self._rouge_dec_dir)
+                target = original_abstract_sents
+                answer = ' '.join(decoded_words)
+                res['target'] = target
+                res['answer_{}'.format(idx)] = answer
+                print('answer_{}: {}'.format(idx, answer))
 
-            target = original_abstract_sents
-            answer = ' '.join(decoded_words)
+            out.append(res)
 
             qcount += 1
-            totalfuzz += fuzz.ratio(target.lower(), answer.lower())
+            totalfuzz += fuzz.ratio(target.lower(), res['answer_0'].lower())
             print("target: ", target)
-            print("answer: ", answer,'\n')
+            #print("answer: ", answer,'\n')
             print("avg fuzz after %d questions = %f"%(qcount,float(totalfuzz)/qcount))
             counter += 1
             if counter % 1000 == 0:
@@ -118,8 +136,8 @@ class BeamSearch(object):
 
         print("Decoder has finished reading dataset for single_pass.")
         print("Now starting ROUGE eval...")
-        results_dict = rouge_eval(self._rouge_ref_dir, self._rouge_dec_dir)
-        rouge_log(results_dict, self._decode_dir)
+        #results_dict = rouge_eval(self._rouge_ref_dir, self._rouge_dec_dir)
+        #rouge_log(results_dict, self._decode_dir)
 
 
     def beam_search(self, batch):
@@ -234,11 +252,14 @@ class BeamSearch(object):
 
         beams_sorted = self.sort_beams(results)
 
-        return beams_sorted[0]
+        return beams_sorted[:]
 
 if __name__ == '__main__':
     model_filename = sys.argv[1]
+    file_out = open(sys.argv[2], 'w')
     beam_Search_processor = BeamSearch(model_filename)
     beam_Search_processor.decode()
+    file_out.write(json.dumps(out, indent=4, sort_keys=True))
+    file_out.close()
 
 
