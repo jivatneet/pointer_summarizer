@@ -422,6 +422,8 @@ class Train(object):
                     tag_name = 'data/val_em'
                     summary.value.add(tag=tag_name, simple_value=valem)
 
+                    self.summary_writer.add_summary(summary, iter)
+
                     # update best valiation set accuracy
                     if valem > best_em:
                         print("Updating best model. Earlier exact match: {} New best: {}".format(best_em, valem))
