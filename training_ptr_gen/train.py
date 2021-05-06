@@ -25,17 +25,19 @@ from train_util import get_input_from_batch, get_output_from_batch
 use_cuda = config.use_gpu and torch.cuda.is_available()
 
 class Beam(object):
-  def __init__(self, tokens, log_probs, state, context, coverage):
+  def __init__(self, tokens, log_probs, state, state1, context, coverage):
     self.tokens = tokens
     self.log_probs = log_probs
     self.state = state
+    self.state1 = state1
     self.context = context
     self.coverage = coverage
 
-  def extend(self, token, log_prob, state, context, coverage):
+  def extend(self, token, log_prob, state, state1, context, coverage):
     return Beam(tokens = self.tokens + [token],
                       log_probs = self.log_probs + [log_prob],
                       state = state,
+                      state1 = state1,
                       context = context,
                       coverage = coverage)
 
@@ -53,7 +55,7 @@ class Train(object):
         self.batcher = Batcher(config.train_data_path, self.vocab, mode='train',
                                batch_size=config.batch_size, single_pass=False)
         
-        self.testbatcher = Batcher(config.eval_data_path, self.vocab, mode='decode',
+        self.testbatcher = Batcher(config.dev_data_path, self.vocab, mode='decode',
                               batch_size=config.beam_size, single_pass=False)
         
         time.sleep(15)
@@ -68,9 +70,10 @@ class Train(object):
 
         self.summary_writer = tf.compat.v1.summary.FileWriter(train_dir)
 
-    def save_model(self, running_avg_loss, iter, fuzz = False, fuzzval = None):
+    def save_model(self, running_avg_loss, iter, epochs, exact_match = False, fuzzval = None):
         state = {
             'iter': iter,
+            'epoch': epochs,
             'encoder_state_dict': self.model.encoder.state_dict(),
             'decoder_state_dict': self.model.decoder.state_dict(),
             'reduce_state_dict': self.model.reduce_state.state_dict(),
@@ -78,11 +81,11 @@ class Train(object):
             'current_loss': running_avg_loss
         }
 
-        if fuzz:
-            model_save_path = os.path.join(self.model_dir, 'model_fuzz_%d_%d_%f' % (iter, int(time.time()), fuzzval))
+        if exact_match:
+            model_save_path = os.path.join(self.model_dir, 'model_em_%d_%d_%f' % (iter, int(time.time()), fuzzval))
 
         else:
-            model_save_path = os.path.join(self.model_dir, 'model_loss_%d_%d_%f' % (iter, int(time.time()), running_avg_loss))
+            model_save_path = os.path.join(self.model_dir, 'model_loss_%d_%d_%f' % (epochs, iter, running_avg_loss))
         torch.save(state, model_save_path)
 
 #-----------------------------------------DECODING-------------------------------------------------------------------------#
@@ -97,8 +100,9 @@ class Train(object):
         counter = 0
         qcount = 0
         totalfuzz = 0.0
+        exact_match = 0
 
-        while qcount < 80:
+        while qcount < config.dev_size:
             # Run beam search to get best Hypothesis
             best_summary = self.beam_search(batch)
 
@@ -126,12 +130,32 @@ class Train(object):
             print("target: ", target)
             print("answer: ", answer, '\n')
             print("avg fuzz after %d questions = %f" % (qcount, float(totalfuzz) / qcount))
-            
+            target = target.strip().split('[sep]')[0].split()
+            answer = answer.strip().split('[sep]')[0].split()
+
+            for ind,ele in enumerate(target):
+                try:
+                  ele = float(ele)
+                  target[ind] = ele
+                except ValueError:
+                    pass
+
+            for ind, ele in enumerate(answer):
+                try:
+                    ele = float(ele)
+                    answer[ind] = ele
+                except ValueError:
+                    pass
+
+            if target == answer:
+                exact_match += 1
+            print("exact match after %d quesions = %d" % (qcount, exact_match))
+
             counter += 1
             batch = self.testbatcher.next_batch()
 
         print("Ending validation")
-        return totalfuzz/100.0, qcount
+        return totalfuzz/qcount, exact_match
 
     def beam_search(self, batch):
         # batch should have only one example
@@ -139,16 +163,24 @@ class Train(object):
             get_input_from_batch(batch, use_cuda)
 
         encoder_outputs, encoder_feature, encoder_hidden = self.model.encoder(enc_batch, enc_lens, enc_padding_mask)
-        s_t_0 = self.model.reduce_state(encoder_hidden)
+        # print("VAL HIDDEN LEN: ", len(encoder_hidden))
+        # print("VAL HIDDEN: ", encoder_hidden[0].shape)
+        s_t_0 = self.model.reduce_state(encoder_hidden, decode=True)
+        # print("VAL HIDDEN AFTER: ", s_t_0[0].shape)
 
         dec_h, dec_c = s_t_0  # 1 x 2*hidden_size
-        dec_h = dec_h.squeeze()
-        dec_c = dec_c.squeeze()
+        # dec_h = dec_h.squeeze()
+        # dec_c = dec_c.squeeze()
+        dec_h0 = dec_h[0].squeeze()
+        dec_h1 = dec_h[1].squeeze()
+        dec_c0 = dec_c[0].squeeze()
+        dec_c1 = dec_c[1].squeeze()
 
         # decoder batch preparation, it has beam_size example initially everything is repeated
         beams = [Beam(tokens=[self.vocab.word2id(data.START_DECODING)],
                       log_probs=[0.0],
-                      state=(dec_h[0], dec_c[0]),
+                      state=(dec_h0[0], dec_c0[0]),
+                      state1 = (dec_h1[0], dec_c1[0]),
                       context=c_t_0[0],
                       coverage=(coverage_t_0[0] if config.is_coverage else None))
                  for _ in range(config.beam_size)]
@@ -166,6 +198,9 @@ class Train(object):
 
             all_context = []
 
+            all_state_h1 = []
+            all_state_c1 = []
+
             for h in beams:
                 state_h, state_c = h.state
                 all_state_h.append(state_h)
@@ -173,7 +208,18 @@ class Train(object):
 
                 all_context.append(h.context)
 
-            s_t_1 = (torch.stack(all_state_h, 0).unsqueeze(0), torch.stack(all_state_c, 0).unsqueeze(0))
+                state_h1, state_c1 = h.state1
+                all_state_h1.append(state_h1)
+                all_state_c1.append(state_c1)
+
+            # print("ALL S 1st ele: ", all_state_h[0].shape, all_state_h1[0].shape)
+            hcat = torch.cat((torch.stack(all_state_h, 0).unsqueeze(0), torch.stack(all_state_h1, 0).unsqueeze(0)), dim=0)
+            ccat = torch.cat((torch.stack(all_state_c, 0).unsqueeze(0), torch.stack(all_state_c1, 0).unsqueeze(0)), dim=0)
+            s_t_1 = (hcat, ccat)
+
+            # print("ST111111: ", s_t_1[0].shape)
+
+            # s_t_1 = (torch.stack(all_state_h, 0).unsqueeze(0), torch.stack(all_state_c, 0).unsqueeze(0))
             c_t_1 = torch.stack(all_context, 0)
 
             coverage_t_1 = None
@@ -182,6 +228,8 @@ class Train(object):
                 for h in beams:
                     all_coverage.append(h.coverage)
                 coverage_t_1 = torch.stack(all_coverage, 0)
+
+            # print("DECODE ST1: ", s_t_1[0].shape)
 
             final_dist, s_t, c_t, attn_dist, p_gen, coverage_t = self.model.decoder(y_t_1, s_t_1,
                                                                                     encoder_outputs, encoder_feature,
@@ -192,14 +240,17 @@ class Train(object):
             topk_log_probs, topk_ids = torch.topk(log_probs, config.beam_size * 2)
 
             dec_h, dec_c = s_t
-            dec_h = dec_h.squeeze()
-            dec_c = dec_c.squeeze()
+            dec_h0 = dec_h[0].squeeze()
+            dec_h1 = dec_h[1].squeeze()
+            dec_c0 = dec_c[0].squeeze()
+            dec_c1 = dec_c[1].squeeze()
 
             all_beams = []
             num_orig_beams = 1 if steps == 0 else len(beams)
             for i in range(num_orig_beams):
                 h = beams[i]
-                state_i = (dec_h[i], dec_c[i])
+                state_i = (dec_h0[i], dec_c0[i])
+                state_i1 = (dec_h1[i], dec_c1[i])
                 context_i = c_t[i]
                 coverage_i = (coverage_t[i] if config.is_coverage else None)
 
@@ -207,6 +258,7 @@ class Train(object):
                     new_beam = h.extend(token=topk_ids[i, j].item(),
                                         log_prob=topk_log_probs[i, j].item(),
                                         state=state_i,
+                                        state1 = state_i1,
                                         context=context_i,
                                         coverage=coverage_i)
                     all_beams.append(new_beam)
@@ -339,10 +391,14 @@ class Train(object):
     def trainIters(self, n_iters, model_file_path=None):
         iter, running_avg_loss = self.setup_train(model_file_path)
         start = time.time()
+        best_em = 0
         best_fuzz = 0.0
+        epochs = 0
+
         while iter < n_iters:
             batch = self.batcher.next_batch()
             loss = self.train_one_batch(batch)
+            epochs = int((iter*config.batch_size)/config.train_size)
 
             running_avg_loss = calc_running_avg_loss(loss, running_avg_loss, self.summary_writer, iter)
             iter += 1
@@ -352,24 +408,31 @@ class Train(object):
                 print('steps %d loss: %f running avg loss: %f' % (iter, loss, running_avg_loss))
 
             # perform validation
-            if iter%100 == 0 and iter > 1:
+            if iter%7000 == 0 and iter > 1:
                 self.model.encoder = self.model.encoder.eval()
                 self.model.decoder = self.model.decoder.eval()
                 self.model.reduce_state = self.model.reduce_state.eval()
 
                 with torch.no_grad():
-                    valfuzz, qcount = self.decode()
+                    valfuzz, valem = self.decode()
+
+                    summary = tf.Summary()
+                    tag_name = 'data/val_fuzz'
+                    summary.value.add(tag=tag_name, simple_value=valfuzz)
+                    tag_name = 'data/val_em'
+                    summary.value.add(tag=tag_name, simple_value=valem)
 
                     # update best valiation set accuracy
-                    if valfuzz > best_fuzz:
-                        print("Updating best model. Earlier fuzz: {} New best: {}".format(best_fuzz, valfuzz))
-                        best_fuzz = valfuzz
+                    if valem > best_em:
+                        print("Updating best model. Earlier exact match: {} New best: {}".format(best_em, valem))
+                        best_em = valem
 
                         snapshot_prefix = os.path.join(self.model_dir, 'best_snapshot')
-                        snapshot_path = snapshot_prefix + '_loss_{}_fuzz_{}'.format(running_avg_loss, best_fuzz)
+                        snapshot_path = snapshot_prefix + '_epochs_{}_loss_{}_em_{}'.format(epochs, running_avg_loss, best_em)
 
                         state = {
                              'iter': iter,
+                             'epoch': epochs,
                              'encoder_state_dict': self.model.encoder.state_dict(),
                              'decoder_state_dict': self.model.decoder.state_dict(),
                              'reduce_state_dict': self.model.reduce_state.state_dict(),
@@ -385,11 +448,11 @@ class Train(object):
 
             print_interval = 1000
             if iter % print_interval == 0:
-                print('steps %d, seconds for %d batch: %.2f , loss: %f' % (iter, print_interval,
+                print('epochs %d, steps %d, seconds for %d batch: %.2f , loss: %f' % (epochs, iter, print_interval,
                                                                            time.time() - start, loss))
                 start = time.time()
-            if iter % 5000 == 0:
-                self.save_model(running_avg_loss, iter)
+            if iter % 7000 == 0:
+                self.save_model(running_avg_loss, iter, epochs)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Train script")

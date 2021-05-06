@@ -27,17 +27,19 @@ from train_util import get_input_from_batch
 use_cuda = config.use_gpu and torch.cuda.is_available()
 
 class Beam(object):
-  def __init__(self, tokens, log_probs, state, context, coverage):
+  def __init__(self, tokens, log_probs, state, state1, context, coverage):
     self.tokens = tokens
     self.log_probs = log_probs
     self.state = state
+    self.state1 = state1
     self.context = context
     self.coverage = coverage
 
-  def extend(self, token, log_prob, state, context, coverage):
+  def extend(self, token, log_prob, state, state1, context, coverage):
     return Beam(tokens = self.tokens + [token],
                       log_probs = self.log_probs + [log_prob],
                       state = state,
+                      state1 = state1,
                       context = context,
                       coverage = coverage)
 
@@ -96,8 +98,11 @@ class BeamSearch(object):
 
             original_abstract_sents = batch.original_abstracts_sents[0]
 
-            target, answer = write_for_rouge(original_abstract_sents, decoded_words, counter,
-                            self._rouge_ref_dir, self._rouge_dec_dir)
+            # target, answer = write_for_rouge(original_abstract_sents, decoded_words, counter,
+            #                  self._rouge_ref_dir, self._rouge_dec_dir)
+
+            target = original_abstract_sents
+            answer = ' '.join(decoded_words)
 
             qcount += 1
             totalfuzz += fuzz.ratio(target.lower(), answer.lower())
@@ -123,17 +128,22 @@ class BeamSearch(object):
             get_input_from_batch(batch, use_cuda)
 
         encoder_outputs, encoder_feature, encoder_hidden = self.model.encoder(enc_batch, enc_lens, enc_padding_mask)
-        s_t_0 = self.model.reduce_state(encoder_hidden)
+        s_t_0 = self.model.reduce_state(encoder_hidden, decode =True)
 
         dec_h, dec_c = s_t_0 # 1 x 2*hidden_size
-        dec_h = dec_h.squeeze()
-        dec_c = dec_c.squeeze()
+        # dec_h = dec_h.squeeze()
+        # dec_c = dec_c.squeeze()
+        dec_h0 = dec_h[0].squeeze()
+        dec_h1 = dec_h[1].squeeze()
+        dec_c0 = dec_c[0].squeeze()
+        dec_c1 = dec_c[1].squeeze()
 
-        #decoder batch preparation, it has beam_size example initially everything is repeated
+        # decoder batch preparation, it has beam_size example initially everything is repeated
         beams = [Beam(tokens=[self.vocab.word2id(data.START_DECODING)],
                       log_probs=[0.0],
-                      state=(dec_h[0], dec_c[0]),
-                      context = c_t_0[0],
+                      state=(dec_h0[0], dec_c0[0]),
+                      state1 = (dec_h1[0], dec_c1[0]),
+                      context=c_t_0[0],
                       coverage=(coverage_t_0[0] if config.is_coverage else None))
                  for _ in range(config.beam_size)]
         results = []
@@ -145,10 +155,13 @@ class BeamSearch(object):
             y_t_1 = Variable(torch.LongTensor(latest_tokens))
             if use_cuda:
                 y_t_1 = y_t_1.cuda()
-            all_state_h =[]
+            all_state_h = []
             all_state_c = []
 
             all_context = []
+
+            all_state_h1 = []
+            all_state_c1 = []
 
             for h in beams:
                 state_h, state_c = h.state
@@ -157,8 +170,15 @@ class BeamSearch(object):
 
                 all_context.append(h.context)
 
-            s_t_1 = (torch.stack(all_state_h, 0).unsqueeze(0), torch.stack(all_state_c, 0).unsqueeze(0))
+                state_h1, state_c1 = h.state1
+                all_state_h1.append(state_h1)
+                all_state_c1.append(state_c1)
+
+            hcat = torch.cat((torch.stack(all_state_h, 0).unsqueeze(0), torch.stack(all_state_h1, 0).unsqueeze(0)), dim=0)
+            ccat = torch.cat((torch.stack(all_state_c, 0).unsqueeze(0), torch.stack(all_state_c1, 0).unsqueeze(0)), dim=0)
+            s_t_1 = (hcat, ccat)
             c_t_1 = torch.stack(all_context, 0)
+
 
             coverage_t_1 = None
             if config.is_coverage:
@@ -174,14 +194,17 @@ class BeamSearch(object):
             topk_log_probs, topk_ids = torch.topk(log_probs, config.beam_size * 2)
 
             dec_h, dec_c = s_t
-            dec_h = dec_h.squeeze()
-            dec_c = dec_c.squeeze()
+            dec_h0 = dec_h[0].squeeze()
+            dec_h1 = dec_h[1].squeeze()
+            dec_c0 = dec_c[0].squeeze()
+            dec_c1 = dec_c[1].squeeze()
 
             all_beams = []
             num_orig_beams = 1 if steps == 0 else len(beams)
             for i in range(num_orig_beams):
                 h = beams[i]
-                state_i = (dec_h[i], dec_c[i])
+                state_i = (dec_h0[i], dec_c0[i])
+                state_i1 = (dec_h1[i], dec_c1[i])
                 context_i = c_t[i]
                 coverage_i = (coverage_t[i] if config.is_coverage else None)
 
@@ -189,6 +212,7 @@ class BeamSearch(object):
                     new_beam = h.extend(token=topk_ids[i, j].item(),
                                    log_prob=topk_log_probs[i, j].item(),
                                    state=state_i,
+                                   state1 = state_i1,
                                    context=context_i,
                                    coverage=coverage_i)
                     all_beams.append(new_beam)

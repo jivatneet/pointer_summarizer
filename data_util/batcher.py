@@ -17,7 +17,7 @@ import random
 random.seed(1234)
 
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased', do_lower_case=True)
-vectorisation_len = 500
+vectorisation_len = 350
 
 class Example(object):
 
@@ -42,7 +42,8 @@ class Example(object):
     self.enc_input = ques_vectors[:config.max_enc_steps]
 
     # Process the abstract (intermediate sparql)
-    abstract = abstract.replace('wd:','').replace('wdt:','').replace('ps:','').replace('pq:','').replace('p:','').replace("'"," ' ").lower()
+    #abstract = abstract.replace('wd:','').replace('wdt:','').replace('ps:','').replace('pq:','').replace('p:','').replace("'"," ' ").lower()
+    abstract = abstract.replace("'"," ' ").lower()
     abstract_sentences = abstract
     abstract_words = abstract.split()
 

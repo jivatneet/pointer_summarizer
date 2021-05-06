@@ -99,8 +99,9 @@ def example_generator(data_path, single_pass):
             if not question or not intermediate_sparql:
                 continue
 
-            question = question.replace('{','').replace('}','')
-            intermediate_sparql = intermediate_sparql.replace(","," , ").replace('{',' { ').replace('}',' } ').replace('(',' ( ').replace(')',' ) ')#.replace('.',' . ')
+            question = question.replace('?',' ?')
+            intermediate_sparql = intermediate_sparql.replace('vr0.','vr0 .').replace('vr1.','vr1 .').replace('COUNT(?','COUNT ( ?').replace('vr0)','vr0 )').replace('vr1)','vr1 )').replace('^^',' ^^ ') 
+            #intermediate_sparql = intermediate_sparql.replace(","," , ").replace('{',' { ').replace('}',' } ').replace('(',' ( ').replace(')',' ) ')#.replace('.',' . ')
                          
             questiontokens = linearr[2]
             questionvectors = linearr[3]
@@ -120,11 +121,11 @@ def example_generator(data_path, single_pass):
             # enc_input_extend_vocab, question_oovs = Data_Helper.article_to_ids(question_words, vocab)
 
             for idx,ent in enumerate(ents):
-                intermediate_sparql = intermediate_sparql.replace(ent,'entpos@@'+str(ents.index(ent)+1))
+                intermediate_sparql = intermediate_sparql.replace('ns:'+ent,'entpos@@'+str(ents.index(ent)+1))
             for idx,rel in enumerate(rels):
-                intermediate_sparql = intermediate_sparql.replace(rel,'predpos@@'+str(rels.index(rel)+1))
-            sparqladd = ' [sep] ' + ' '.join(ents) + ' [sep] ' + ' '.join(rels)
-            intermediate_sparql += sparqladd
+                intermediate_sparql = intermediate_sparql.replace('ns:'+rel,'predpos@@'+str(rels.index(rel)+1))
+            #sparqladd = ' [sep] ' + ' '.join(ents) + ' [sep] ' + ' '.join(rels)
+            #intermediate_sparql += sparqladd
                     
             output = {
             
@@ -194,7 +195,6 @@ def abstract2ids(abstract_words, vocab, article_oovs):
   ids = []
   unk_id = vocab.word2id(UNKNOWN_TOKEN)
   for w in abstract_words:
-    
     if len(w) > 2:
         if w[0] == "'" and w[-1] == "'" : #sparql specific hack for handling questions like "which cities start with the letter L "
             w = w[1:-1]
